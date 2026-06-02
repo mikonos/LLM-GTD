@@ -9,7 +9,9 @@
 /memory/
 /.claude/skills/
 /.agent/
-/.agents/
+/.agents/*
+!/.agents/plugins/
+!/.agents/plugins/marketplace.json
 
 # Local scratch
 *.local

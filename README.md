@@ -69,7 +69,7 @@ agent-native.
 
 | You want to... | Command | What happens |
 |---|---|---|
-| set up the trusted system | `gtd-init` | creates the eight GTD lists, installs/refreshes Codex slash prompts, and checks wiring |
+| set up the trusted system | `gtd-init` | creates the eight GTD lists and checks wiring; legacy installs also refresh Codex slash prompts |
 | capture a thought or task | `gtd-capture` | writes it to inbox first, then auto-clarifies small inputs |
 | process inbox items | `gtd-clarify` | turns vague "stuff" into next actions, projects, waiting-for, reference, or someday |
 | clean the system | `gtd-organize` | fixes mechanical drift: orphan actions, stalled projects, bad contexts, duplicates |
@@ -117,7 +117,7 @@ The same skill package and the same `memory/gtd/` state can be used from multipl
 |---|---|---|
 | Claude Code | `.claude/commands/gtd*.md` | same `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` plus keyword rules | same `memory/gtd/` |
-| Codex | `~/.codex/prompts/gtd*.md` plus optional `gtd-orchestrator` | same `memory/gtd/` |
+| Codex | Codex plugin `gtd-harness`; legacy `~/.codex/prompts/gtd*.md` also works | same `memory/gtd/` |
 
 ## Why It Is Different
 
@@ -139,6 +139,38 @@ If Google Calendar is connected, it is the only hard landscape. Calendar writes 
 proposal and explicit confirmation. If the tool fails, LLM-GTD does not pretend anything happened.
 
 ## Install
+
+### Install as a Codex plugin
+
+LLM-GTD now includes a repo-scoped Codex plugin package:
+
+```text
+.agents/plugins/marketplace.json
+plugins/gtd-harness/
+```
+
+Add this repository as a Codex plugin marketplace, then install `gtd-harness` from the Codex
+plugin directory:
+
+```bash
+codex plugin marketplace add https://github.com/mikonos/LLM-GTD.git
+```
+
+After installing the plugin, start Codex in the workspace where you want your GTD state to live and
+ask it to use `gtd-harness`:
+
+```text
+Set up my GTD trusted system
+Capture and clarify this task: renew passport before summer
+Run my weekly GTD review
+```
+
+The plugin writes user state only under that workspace's `memory/gtd/`. It does not bundle any
+personal GTD state, and it does not include Google Calendar as an app or MCP server. If your Codex
+environment already has Google Calendar available, LLM-GTD can use it as the real hard landscape;
+otherwise it falls back to `memory/gtd/calendar.md`.
+
+### Install with the legacy multi-surface installer
 
 ```bash
 git clone <your-fork-url> LLM-GTD
@@ -233,6 +265,9 @@ If the agent cannot safely infer your commitment, it asks instead of pretending.
 
 ```text
 src/skill/            core gtd-harness skill package
+plugins/gtd-harness/  Codex plugin package generated from src/skill/
+.agents/plugins/      repo-scoped Codex marketplace
+scripts/              repository maintenance scripts
 src/claude-commands/  Claude Code slash commands
 src/codex-prompts/    Codex slash prompts
 src/codex-agents/     Codex orchestrator agent

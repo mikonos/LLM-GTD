@@ -62,7 +62,7 @@ David Allen 给了我们管理承诺的操作系统。LLM-GTD 把这套操作系
 
 | 你想要 | 命令 | 它会做什么 |
 |---|---|---|
-| 搭建可信系统 | `gtd-init` | 创建八张 GTD 清单，安装/刷新 Codex slash prompts，并检查接线 |
+| 搭建可信系统 | `gtd-init` | 创建八张 GTD 清单并检查接线；旧安装模式还会刷新 Codex slash prompts |
 | 捕捉一个想法或任务 | `gtd-capture` | 先写入 inbox，再自动理清小输入 |
 | 清理收件箱 | `gtd-clarify` | 把模糊的 stuff 变成 next action、project、waiting-for、reference 或 someday |
 | 整理系统结构 | `gtd-organize` | 修复机械漂移：孤儿行动、停滞项目、错误情境、重复项 |
@@ -109,7 +109,7 @@ Harness
 |---|---|---|
 | Claude Code | `.claude/commands/gtd*.md` | 同一份 `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` + keyword rules | 同一份 `memory/gtd/` |
-| Codex | `~/.codex/prompts/gtd*.md` + 可选 `gtd-orchestrator` | 同一份 `memory/gtd/` |
+| Codex | Codex 插件 `gtd-harness`；旧版 `~/.codex/prompts/gtd*.md` 仍可用 | 同一份 `memory/gtd/` |
 
 ## 它和普通方案有什么不同
 
@@ -130,6 +130,35 @@ agent 可以替换，状态和工作流留下来。
 如果 Google Calendar 已连接，它就是唯一 hard landscape。日历写入必须先给可检查提案，并由用户显式确认。工具失败时，LLM-GTD 不会假装已经完成。
 
 ## 安装
+
+### 作为 Codex 插件安装
+
+LLM-GTD 现在包含 repo 级 Codex 插件包：
+
+```text
+.agents/plugins/marketplace.json
+plugins/gtd-harness/
+```
+
+把这个仓库加入 Codex 插件 marketplace，然后在 Codex 插件目录里安装 `gtd-harness`：
+
+```bash
+codex plugin marketplace add https://github.com/mikonos/LLM-GTD.git
+```
+
+安装后，在你想存放 GTD 状态的工作区里启动 Codex，并让它使用 `gtd-harness`：
+
+```text
+Set up my GTD trusted system
+Capture and clarify this task: renew passport before summer
+Run my weekly GTD review
+```
+
+插件只会把用户状态写到当前工作区的 `memory/gtd/`，不会打包任何个人 GTD 数据，也不会内置
+Google Calendar app/MCP。如果你的 Codex 环境已经有 Google Calendar 能力，LLM-GTD 会把它当真实
+hard landscape；否则降级到 `memory/gtd/calendar.md`。
+
+### 使用旧版多平台安装器
 
 ```bash
 git clone <your-fork-url> LLM-GTD
@@ -224,6 +253,9 @@ LLM-GTD 会先捕捉所有内容，再理清可以安全推断的部分：
 
 ```text
 src/skill/            gtd-harness 核心 skill 包
+plugins/gtd-harness/  由 src/skill/ 生成的 Codex 插件包
+.agents/plugins/      repo 级 Codex marketplace
+scripts/              仓库维护脚本
 src/claude-commands/  Claude Code slash commands
 src/codex-prompts/    Codex slash prompts
 src/codex-agents/     Codex orchestrator agent

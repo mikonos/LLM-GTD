@@ -1,0 +1,15 @@
+# OS / editor
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Install artifacts (in case install.sh is run inside the repo dir)
+/memory/
+/.claude/skills/
+/.agent/
+/.agents/
+
+# Local scratch
+*.local

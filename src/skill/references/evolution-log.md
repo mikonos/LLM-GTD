@@ -1,0 +1,49 @@
+# gtd-harness 演化日志
+
+## v1.0 — 首版
+David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
+- **状态层**：`memory/gtd/` 八清单（GTD-native，next-actions 按情境分组）
+- **逻辑层**：六命令 SKILL.md（平台中立，无工具名）
+- **适配层**：三平台薄入口 + `capability-map.md`
+- **节律层**：每周回顾命令（cron 可选，不默认开）
+
+设计原则：
+- 按 GTD 第一性原理独立建系统；若工作区已有别的待办系统，本包独立共存，可选 `init --import-legacy` 一次性导入。
+- next-actions 按情境分组（@电脑/@电话/@外出/@家/@议程-人），回归真正的 GTD 模型。
+- `init` 作为首次运行/重装入口（幂等自检）——harness 必须能自我初始化。
+- **Allen × Luhmann 接缝**：捕捉共享、clarify 分流。行动进 GTD，知识进笔记系统。不重造捕捉。
+
+## v1.1 — 日历复用（GCal 读+确认写）
+- **单一日历**：真实 Google Calendar 可达时为唯一 hard landscape，`calendar.md` 退为不可达兜底，不抄副本（Allen 双日历铁律）。
+- **读**：engage 读今天硬约定、review 读本周 hard landscape，先 GCal、不可达降级。
+- **写（需确认）**：clarify 出特定时间事 → 起草可检查提案 → 显式确认 → 写 GCal；tool 成功才报「已写入」，失败记 calendar.md 兜底，不谎报。
+
+## v1.2 — Codex slash 命令 + 三平台触发齐活
+- Codex `~/.codex/prompts/gtd*.md`（7 条），vault 感知 fail-soft（Codex prompts 仅全局，无项目级）。
+- AGENTS.md 自动路由，Codex「说人话即触发」。
+- 三平台触发：cc `/gtd-*`（项目级命令）· Cursor 关键词（skill-rules）· Codex `/gtd-*` + AGENTS 路由 + orchestrator agent。同一真源、同一 `memory/gtd/`。
+
+## v1.3 — capture 默认自动 clarify（AI-native）
+- Allen 原把 capture/clarify 分开是为人脑（切决策模式有成本）；AI 切换成本≈0，故默认 capture→自动 clarify。
+- 保留两条真智慧：① 落盘永远第一步（不丢）；② 批量/mind-sweep 不逐条打断。
+- 单条 act-then-surface：理清归位 + 一行回报 + 可一句话纠错。
+- 人类判断守卫：仅「行动vs知识 / 推不出下一步 / 隐含承诺 / 项目成果不清」四类停下问。
+
+## v1.4 — organize 改为 AI 自动结构卫生
+- organize = 结构卫生（per-item 落位已在 clarify 完成）。最该 AI 全自动：大部分纯机械记账。
+- 机械类静默自动做（孤儿/错情境/死勾/重复/stalled 补下一步），一行汇总；判断类批量问。
+- engage 前置自动扫一遍；review 的 Get Current 内跑。
+
+## v1.5 — 完成项目自动闭环
+- **硬规则**：项目期望成果已达成且无仍需推动的下一步 → 删除整个项目块；不归档、不写「下一步行动：无」。
+- **顺序修正**：organize/review 先判断项目是否已完成；未完成才补 stalled 下一步，避免给已闭环项目硬造动作。
+- **防回归**：`gtd_status.sh` 把「下一步行动：无/已完成/安排已确认」视为无有效下一步，提示跑 `/gtd-organize`。
+
+---
+
+**AI 自动化总览**：capture→clarify 自动、organize（机械）自动；engage 给候选、review 要你反思——保留人的判断。
+
+## 待办 / v2 候选
+- `calendar.md` 接 Apple Reminders + 双向对账。
+- review 自动节律：cron / 定时提醒（默认不开，需用户同意）。
+- engage 挂接每日例程。

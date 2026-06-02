@@ -107,7 +107,7 @@ Harness
 
 | 平台 | 入口 | 状态 |
 |---|---|---|
-| Claude Code | `.claude/commands/gtd*.md` | 同一份 `memory/gtd/` |
+| Claude Code | 插件 `llm-gtd`（skill + `/gtd-*`）；或 `.claude/commands/gtd*.md`（手动） | 同一份 `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` + keyword rules | 同一份 `memory/gtd/` |
 | Codex | Codex 插件 `llm-gtd`；旧版 `~/.codex/prompts/gtd*.md` 仍可用 | 同一份 `memory/gtd/` |
 
@@ -130,6 +130,20 @@ agent 可以替换，状态和工作流留下来。
 如果 Google Calendar 已连接，它就是唯一 hard landscape。日历写入必须先给可检查提案，并由用户显式确认。工具失败时，LLM-GTD 不会假装已经完成。
 
 ## 安装
+
+### 作为 Claude Code 插件安装
+
+本仓库同时是一个 Claude Code 插件 marketplace。在 Claude Code 里：
+
+```text
+/plugin marketplace add mikonos/LLM-GTD
+/plugin install llm-gtd@llm-gtd
+```
+
+内置的 `gtd-harness` skill 会在你说 GTD 相关话时自动激活，并加上 `/gtd-*` 命令
+（`/gtd-init`、`/gtd-capture`、`/gtd-clarify`、`/gtd-organize`、`/gtd-engage`、`/gtd-review`）。
+状态只写到你**当前工作区**的 `memory/gtd/`——绝不打包进插件（`${CLAUDE_PLUGIN_ROOT}` 是只读的 skill，
+你的清单在你的项目里）。在你想存放 GTD 清单的工作区里跑 `/gtd-init`（或直接说）即可。
 
 ### 作为 Codex 插件安装
 

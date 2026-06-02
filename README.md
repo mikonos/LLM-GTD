@@ -1,7 +1,10 @@
-# gtd-harness
+# LLM-GTD
 
 **A GTD (Getting Things Done) agent harness for Claude Code, Cursor, and Codex.**
 One source of truth, one trusted-system state, three platform front-ends.
+
+> The installable skill is named `gtd-harness` (its directory and commands keep that name);
+> **LLM-GTD** is the project / repo name.
 
 > Agent = LLM + harness. The LLM ships with each platform. This repo is the *harness* —
 > the trusted external system that lets your mind go "mind like water": the lists (state),
@@ -55,8 +58,8 @@ LLM  (per platform — does Clarify's judgment: actionable? next action?)
 ## Install
 
 ```bash
-git clone <your-fork-url> gtd-harness
-cd gtd-harness
+git clone <your-fork-url> LLM-GTD
+cd LLM-GTD
 ./install.sh /path/to/your/vault      # defaults to current dir
 ```
 

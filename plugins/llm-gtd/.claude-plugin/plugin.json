@@ -1,0 +1,21 @@
+{
+  "name": "llm-gtd",
+  "version": "1.9.0",
+  "description": "A portable GTD trusted system for Claude Code — capture, clarify, organize, engage, and review commitments in plain Markdown lists under memory/gtd/. Calendar writes are confirmation-gated; engage and review stay human-led.",
+  "author": {
+    "name": "mikonos",
+    "url": "https://github.com/mikonos"
+  },
+  "homepage": "https://github.com/mikonos/LLM-GTD",
+  "repository": "https://github.com/mikonos/LLM-GTD",
+  "license": "MIT",
+  "keywords": [
+    "gtd",
+    "getting-things-done",
+    "productivity",
+    "tasks",
+    "weekly-review",
+    "claude-code",
+    "skills"
+  ]
+}

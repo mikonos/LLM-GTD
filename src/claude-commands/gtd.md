@@ -1,7 +1,7 @@
 ---
 name: gtd
 description: GTD harness 主入口 — 路由到 init/capture/clarify/organize/engage/review，或直接处理任务管理请求
-argument-hint: "[要捕捉的事 / 一个意图，如 '理一下收件箱' '这周做什么']"
+argument-hint: "[要捕捉的事 / 一个意图，如 '理一下收件箱' '这周做什么' 'Schedule coffee with Jack tomorrow afternoon']"
 allowed-tools:
   - Read
   - Write
@@ -33,5 +33,5 @@ $ARGUMENTS
    - 现在该做什么 → engage
    - 每周回顾 → review
    - 搭建/自检 → init
-3. 意图模糊时反问一句再路由，不静默自决。
+3. 不要求用户写具体子命令。`/gtd` 后直接接自然语言时，先判断它是不是新输入/承诺；能判断就走 capture→clarify，不能判断再反问一句。
 </process>

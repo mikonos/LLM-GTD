@@ -59,9 +59,9 @@ description: |
 | **理清收件箱** | `clarify/SKILL.md` | 决策树：可行动吗 → 2分钟/委派/推迟/项目；不可行动 → 垃圾/someday/reference |
 | **结构卫生（AI 自动）** | `organize/SKILL.md` | 机械类（完成项目/孤儿/stalled/情境/死勾/重复）自动修，只把需拍板的浮上来；engage/review 前自动先扫 |
 | **现在该做什么** | `engage/SKILL.md` | 按情境/时间/精力/优先级四要素选下一步 |
-| **每周回顾** | `review/SKILL.md` | Get Clear/Current/Creative + Horizons 巡检（★关键成功因子） |
+| **每周回顾** | `review/SKILL.md` | AI 先生成预回顾包，再做 Get Clear/Current/Creative + Horizons 巡检（★关键成功因子） |
 
-**典型链路**：捕捉随时跑（单条 AI 自动接着 clarify 归位、一行回报，可一句话改；批量则先全捕捉再批量理清）→ engage 看「现在做什么」（前置自动 organize 擦干净结构）→ 每周 review 兜底全局。**AI 自动化程度**：capture→clarify 自动、organize 自动（机械类）；engage 给候选、review 要你反思——这两步保留你的判断。
+**典型链路**：捕捉随时跑（单条 AI 自动接着 clarify 归位、一行回报，可一句话改；批量则先全捕捉再批量理清）→ engage 看「现在做什么」（前置自动 organize 擦干净结构）→ 每周 review 兜底全局。**AI 自动化程度**：capture→clarify 自动、organize 自动（机械类）；engage 给候选；review 先由 AI 生成预回顾包、清理机械卫生、起草候选，最后只让用户确认少数承诺判断。
 
 ---
 
@@ -86,6 +86,7 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 - 系统未搭建（`memory/gtd/` 不存在）→ 先跑 `init`，不直接写清单。
 - 用户没说清是行动还是知识 → 按 clarify「需要行动吗」判定，模糊则反问一句。
 - 写入清单用 intent 语言落盘（追加到对应清单/分组末尾），不新建分区、不覆盖既有条目。
+- Obsidian 链接规则：指向 `memory/gtd/` 里某个文件内标题时，用 `[[文件名#标题|标题]]`，例如 `[[projects#项目名|项目名]]`；不要把同文件内标题写成裸 `[[标题]]`，否则会被误识别成独立文件。
 - 闭环：用户宣告完成 → 从清单**删除该行**（不打勾留痕，沿用仓库 open loops 约定）。
 - 项目闭环：当 `projects.md` 里的期望成果已经达成，且没有仍需推动的下一步 → **删除整个项目块**。不要把已完成项目留作记录，也不要写「下一步行动：无」。
 
@@ -110,3 +111,5 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 ## 演化日志
 
 - v1（2026-06-02）：六命令包 + memory/gtd/ 八清单 + 三平台适配。决策：不管旧 open loops，按 GTD 第一性原理重建（项目决策）。详见 `references/evolution-log.md`。
+- v1.6（2026-06-02）：review 升级为 AI 预回顾包，新增只读 `scripts/gtd_review_prep.sh`。
+- v1.7（2026-06-02）：GTD 内部标题引用统一改为 Obsidian heading link：`[[文件名#标题|标题]]`，避免裸 `[[标题]]` 被误建成独立文件。

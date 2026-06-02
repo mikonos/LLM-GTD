@@ -137,7 +137,7 @@ seed "$GTD_DIR/next-actions.md" <<'EOF'
 
 > 已理清、可立即执行的单步动作。**按情境分组**——你此刻在什么环境/有什么工具，就看对应分组。
 > 动词必须具体（确认/发送/打电话/写），不写「跟进/处理/研究」等空动词。
-> 格式：`- [ ] 具体动作 · 项目：[[projects 条目]]（如属于项目）· 来源：[[笔记]] · 日期：YYYYMMDD`
+> 格式：`- [ ] 具体动作 · 项目：[[projects#项目名|项目名]]（如属于项目）· 来源：[[笔记]] · 日期：YYYYMMDD`
 
 ## @电脑
 > 需要电脑/联网才能做的。
@@ -152,7 +152,7 @@ seed "$GTD_DIR/next-actions.md" <<'EOF'
 > 只能在家做的。
 
 ## @议程-[人名]
-> 下次见到/聊到某人时要提的（按人开子分组，如 `### @议程-李工`）。
+> 下次见到/聊到某人时要提的（按人开子分组，如 `### @议程-Alex`）。
 
 EOF
 
@@ -165,7 +165,7 @@ seed "$GTD_DIR/projects.md" <<'EOF'
 > ## [项目名]
 > - 期望成果：一句话描述「完成长什么样」
 > - 下一步行动：→ 见 next-actions（情境）  *(必须有，否则是 stalled)*
-> - 支持材料：[[reference 条目 / 项目文档]]
+> - 支持材料：[[reference#条目名|条目名]] / [[项目文档]]
 > - 来源：[[笔记]] · 日期：YYYYMMDD
 > ```
 >
@@ -214,6 +214,7 @@ seed "$GTD_DIR/reference.md" <<'EOF'
 > 无需行动、但将来要查的——以及各项目的支持材料指针。
 > 注意：**知识/想法类**笔记走 ZK 管线（fleeting-note → 05_每日记录/），不堆这里；这里只放
 > 与行动/项目直接相关的备查信息（清单、规格、联系方式、项目支持材料链接）。
+> GTD 内部标题引用用 Obsidian heading link：`[[文件名#标题|标题]]`；裸 `[[标题]]` 只用于真实独立文件。
 
 ## 备查
 
@@ -254,7 +255,8 @@ seed "$GTD_DIR/horizons.md" <<'EOF'
 
 EOF
 
-# horizons 内的 [[projects]]/[[next-actions]] 是同目录 wikilink，Obsidian 可解析
+# horizons 内的 [[projects]]/[[next-actions]] 是同目录文件 wikilink，Obsidian 可解析；
+# 指向文件内标题时用 [[文件名#标题|标题]]，避免误建独立文件。
 
 if [ "$IMPORT_LEGACY" -eq 1 ]; then
   echo ""

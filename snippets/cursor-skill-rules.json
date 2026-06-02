@@ -4,7 +4,7 @@
       "type": "workflow",
       "enforcement": "suggest",
       "priority": "high",
-      "description": "GTD（David Allen）五步可信系统主入口包：init/capture/clarify/organize/engage/review。把任务/承诺搬出大脑，进 memory/gtd/ 八清单。新捕捉走 capture→inbox；知识/想法走 fleeting-note（ZK 管线）。",
+      "description": "GTD（David Allen）五步可信系统主入口包：init/capture/clarify/organize/engage/review。把任务/承诺搬出大脑，进 memory/gtd/ 八清单。新捕捉默认 capture→clarify；知识/想法走 fleeting-note（ZK 管线）。",
       "promptTriggers": {
         "keywords": [
           "GTD",
@@ -14,6 +14,9 @@
           "next action",
           "每周回顾",
           "weekly review",
+          "clear my head",
+          "pending items",
+          "what should I do",
           "收件箱",
           "inbox",
           "理清",
@@ -30,7 +33,8 @@
           "(帮我|把这些).*(待办|任务).*(理|清|归)",
           "(这周|今天|现在).*(做什么|该做哪些|干嘛)",
           "(我|脑子|脑袋).*(乱|多|记不住).*(清空|理一理|整理)",
-          "(每周|周).*(回顾|复盘).*(任务|系统|清单)"
+          "(每周|周).*(回顾|复盘).*(任务|系统|清单)",
+          "(clear my head|sort through.*pending|what should I do|weekly review)"
         ]
       },
       "resources": {

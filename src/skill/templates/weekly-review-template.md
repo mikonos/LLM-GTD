@@ -10,6 +10,11 @@ description: 第 N 周 GTD 每周回顾快照——系统状态 + 下周聚焦
 ## 系统状态（回顾前 dashboard）
 - 📥 Inbox：__ · ✅ Next Actions：__ · 🎯 Projects：__（stalled __）· ⏳ Waiting：__ · 💭 Someday：__
 
+## 0. AI 预回顾包
+- 已自动处理：
+- 建议确认：
+- 下周候选：
+
 ## ① Get Clear
 - Inbox 清空：是 / 否（残留 __ 项原因：）
 
@@ -26,6 +31,12 @@ description: 第 N 周 GTD 每周回顾快照——系统状态 + 下周聚焦
 ## ④ Horizons 巡检
 - 仍服务于目标/责任领域的项目：
 - 该砍 / 重估的项目：
+
+## 确认后已落盘
+- 清 inbox：
+- 销项 / 删除：
+- 新增 / 移动：
+- 等待 / 催办：
 
 ## 下周聚焦的 3 件事
 1.

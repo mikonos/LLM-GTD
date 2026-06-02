@@ -2,6 +2,14 @@
 
 All notable changes. See `src/skill/references/evolution-log.md` for the in-skill log.
 
+## v1.7 — Obsidian heading links for internal GTD references
+Internal references to headings inside `memory/gtd/` now use `[[file#heading|heading]]`
+to avoid accidentally creating standalone Obsidian files.
+
+## v1.6 — Weekly review prep package
+Weekly review now starts with an AI prep pass. Added read-only `gtd_review_prep.sh`
+and optional local notification helper; updated review flow and snapshot template.
+
 ## v1.5 — Project auto-closure
 Completed project blocks (outcome met, no live next action) are deleted, not archived.
 Organize/review check "is it done?" before drafting a next action.

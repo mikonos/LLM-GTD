@@ -17,3 +17,9 @@
 1. **next-actions 里塞了多步成果** → 应拆：成果进 projects，第一步留 next-actions。
 2. **calendar 里塞了普通待办** → 日历只放「这天/这点才做」的，其余进 next-actions。
 3. **GTD 清单里塞了知识笔记** → 知识/洞察走 `fleeting-note` → ZK 管线，不进任何 GTD 清单。
+
+## Obsidian 链接规则
+
+- 指向 `memory/gtd/` 某个文件内标题：用 `[[文件名#标题|标题]]`，例如 `[[reference#条目名|条目名]]`。
+- 指向真实独立文件：才用裸 `[[文件名]]`。
+- 不要把清单内标题写成裸 `[[标题]]`，否则 Obsidian 会把它当成待创建的新文件。

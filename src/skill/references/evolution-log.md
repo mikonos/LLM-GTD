@@ -39,9 +39,21 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 - **顺序修正**：organize/review 先判断项目是否已完成；未完成才补 stalled 下一步，避免给已闭环项目硬造动作。
 - **防回归**：`gtd_status.sh` 把「下一步行动：无/已完成/安排已确认」视为无有效下一步，提示跑 `/gtd-organize`。
 
+## v1.6 — review 升级为 AI 预回顾包
+- **边界重画**：review 不再只是提醒用户翻清单；AI 先做系统体检、机械整理、候选动作、话术草稿，用户只确认少数承诺判断。
+- **新增只读脚本**：`scripts/gtd_review_prep.sh` 生成预回顾包：dashboard、inbox 摘要、stalled projects、waiting-for、模糊 next-action、someday 候选、确认队列。
+- **流程升级**：review 先跑预回顾包 + organize 机械卫生，再进入 Get Clear / Get Current / Get Creative / Horizons。
+- **定时边界**：未来 cron / loop / launchd 只能提醒并调用预回顾脚本；不自动删改清单、不写日历、不发消息、不确定下周重点。
+- **模板同步**：weekly review 快照新增「AI 预回顾包」与「确认后已落盘」两段。
+
+## v1.7 — GTD 内部链接改为 Obsidian heading link
+- **规则**：指向 `memory/gtd/` 文件内标题时，统一写 `[[文件名#标题|标题]]`。
+- **例子**：项目引用 `[[projects#项目名|项目名]]`；支持材料引用 `[[reference#条目名|条目名]]`。
+- **边界**：裸 `[[文件名]]` 仍用于真实独立文件，例如 `[[projects]]`、`[[next-actions]]`。
+
 ---
 
-**AI 自动化总览**：capture→clarify 自动、organize（机械）自动；engage 给候选、review 要你反思——保留人的判断。
+**AI 自动化总览**：capture→clarify 自动、organize（机械）自动；review 先预处理；engage 给候选，用户保留承诺、选择与反思。
 
 ## 待办 / v2 候选
 - `calendar.md` 接 Apple Reminders + 双向对账。

@@ -30,8 +30,8 @@ SKILL.md 用 intent 语言（"读取该清单"/"追加一行"），按 Codex 工
 
 <execution_flow>
 1. 若 memory/gtd/ 不存在 → 先跑 init（rtk bash …/scripts/gtd_init.sh），再继续。
-2. 按用户意图路由到对应子命令（见包 SKILL.md 的 routing 表），按该子命令工作流执行。
-3. 每周回顾（review）是关键成功因子：先 rtk bash …/scripts/gtd_status.sh 拿全景，再按 Get Clear/Current/Creative + Horizons 巡检逐段执行。
+2. 按用户意图路由到对应子命令（见包 SKILL.md 的 routing 表），按该子命令工作流执行。用户直接给自然语言任务/承诺时，默认走 capture→clarify；只有意图确实不明时才反问。
+3. 每周回顾（review）是关键成功因子：先 rtk bash …/scripts/gtd_review_prep.sh 生成只读预回顾包；脚本不可用时退回 gtd_status.sh + 手动扫描；再按 Get Clear/Current/Creative + Horizons 巡检逐段执行。
 4. Allen × Luhmann 接缝：输入是行动/承诺 → GTD 清单；输入是知识/想法 → 移交 ZK 管线（fleeting-note），不堆进 GTD 清单。
 5. 闭环：用户宣告完成 → 从清单删除该行（不打勾留痕）。
 </execution_flow>

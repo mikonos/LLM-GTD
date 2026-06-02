@@ -11,6 +11,22 @@ without turning your life into a pile of half-processed tasks.
 > The installable skill is named `gtd-harness`.
 > **LLM-GTD** is the project and repository name.
 
+## See it in one example
+
+You don't hand it a task — you hand it an **intention**:
+
+> **You:** I want to get my daughter into table tennis
+> **LLM-GTD:** Makes it a **project**; first action → *"talk with her for 10 min — does she want to try it, current level, sessions/week…"*. It does **not** enroll, schedule, or contact a coach.
+
+A while later you report back:
+
+> **You:** Talked with her — she's really into it, two sessions/week, ~1h each
+> **LLM-GTD:** Checks the talk off; **advances the project** to *"shortlist 2-3 classes — slots, price, distance, trial options"*; logs the facts as support material; flags your "~1h" as **needs-confirmation**.
+
+A project without a current next action is a stalled promise. LLM-GTD keeps the promise **live across
+days** — you supply judgment and report reality; it does the bookkeeping.
+→ [full walkthrough](docs/demo.md)
+
 ## The Short Version
 
 Most AI productivity workflows fail for the same reason most human GTD systems fail: the inbox fills,

@@ -8,7 +8,7 @@
 # 装什么：
 #   1. skill 包          → <VAULT>/.cursor/skills/gtd-harness/
 #   2. Claude Code 命令  → <VAULT>/.claude/commands/gtd*.md      （/gtd-* slash 命令）
-#   3. Codex slash 命令  → ~/.codex/prompts/gtd*.md              （全局，Codex 限制）
+#   3. Codex slash 命令  → ${CODEX_HOME:-~/.codex}/prompts/gtd*.md（全局，Codex 限制）
 #   4. Codex agent       → <VAULT>/.codex/agents/gtd-orchestrator.toml
 #   5. 跑 gtd_init.sh    → 建 <VAULT>/memory/gtd/ 八清单（幂等）
 #   Cursor 关键词触发 + AGENTS.md 自动路由为手动步骤（见末尾提示）。
@@ -18,6 +18,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VAULT="${1:-$(pwd)}"
 VAULT="$(cd "$VAULT" && pwd)"   # 绝对化
+CODEX_HOME_DIR="${CODEX_HOME:-$HOME/.codex}"
 
 echo "GTD Harness installer"
 echo "  仓库：$REPO"
@@ -27,6 +28,9 @@ echo ""
 # 1. skill 包
 mkdir -p "$VAULT/.cursor/skills/gtd-harness"
 cp -R "$REPO/src/skill/." "$VAULT/.cursor/skills/gtd-harness/"
+# 同步 Codex prompt 模板进 skill 包，保证单独跑 gtd_init.sh 也能安装/刷新 /gtd*。
+mkdir -p "$VAULT/.cursor/skills/gtd-harness/templates/codex-prompts"
+cp "$REPO"/src/codex-prompts/gtd*.md "$VAULT/.cursor/skills/gtd-harness/templates/codex-prompts/"
 echo "✅ skill 包 → .cursor/skills/gtd-harness/"
 
 # 2. Claude Code 命令（把 __VAULT__ 占位替换成真实绝对路径）
@@ -37,9 +41,9 @@ done
 echo "✅ Claude Code 命令 → .claude/commands/（/gtd-* ）"
 
 # 3. Codex slash 命令（全局；Codex prompts 只支持 CODEX_HOME 级）
-mkdir -p "$HOME/.codex/prompts"
-cp "$REPO"/src/codex-prompts/gtd*.md "$HOME/.codex/prompts/"
-echo "✅ Codex slash 命令 → ~/.codex/prompts/（全局 /gtd-* ）"
+mkdir -p "$CODEX_HOME_DIR/prompts"
+cp "$REPO"/src/codex-prompts/gtd*.md "$CODEX_HOME_DIR/prompts/"
+echo "✅ Codex slash 命令 → $CODEX_HOME_DIR/prompts/（全局 /gtd-* ）"
 
 # 4. Codex agent
 mkdir -p "$VAULT/.codex/agents"

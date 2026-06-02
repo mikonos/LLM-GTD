@@ -1,6 +1,71 @@
 # Demo — a day with LLM-GTD
 
+[中文](demo.zh-CN.md) | English
+
 A realistic transcript of the five steps. Examples are illustrative; your wording can be natural.
+
+---
+
+## Featured: a project that advances as you report back
+
+This is the move generic to-do tools can't make. You don't hand the agent a tidy task — you hand it
+an *intention*. It recognizes a multi-step **project**, sets the *right first action*, and when you
+come back with progress, it **closes the old next action and derives the next one** — keeping the
+project alive without you re-planning.
+
+**Turn 1** — a vague intention:
+
+> You:
+```
+/gtd I want to get my daughter into table tennis
+```
+> LLM-GTD:
+```
+Filed per GTD.
+
+Made it a project:  📁 "Daughter's table-tennis interest & training path"
+
+First action → Next Actions @home:
+  Talk with her for 10 min — does she want to try it, current level,
+  how many sessions/week she'd accept, what she does/doesn't enjoy.
+
+I did NOT enroll, schedule, contact a coach, or write to the calendar.
+GTD state verified: Inbox 0, Projects 3, Next Actions 3, stalled 0.
+
+Note: the organizer suggests a later @computer action — "shortlist 3 nearby kids'
+table-tennis options". My call: ask her first, then research providers.
+```
+*It refused to jump to enrollment. The right first action for a project about a *person* is to talk
+to that person — and it deferred the research step on purpose.*
+
+**Turn 2** — later, you report back:
+
+> You:
+```
+/gtd Talked with my daughter — she's really into table tennis, can do two sessions/week, ~1h each
+```
+> LLM-GTD:
+```
+Clarified and filed.
+
+Your "talk with her 10 min" is checked off Next Actions; the project advances to its next action:
+  Shortlist 2-3 table-tennis classes suitable for her — record slots for two
+  sessions/week (~1h each), price, distance, and trial-class options.
+  → next-actions.md
+
+Project support material updated: she's interested, OK with two sessions/week;
+I read your "~1h" as the session length but marked it needs-confirmation.
+  → projects.md + reference.md
+
+Check: Inbox 0, Projects 3, no stalled.
+```
+*The project moved one step forward on its own. The completed action was closed, the new next action
+was derived from what you learned, support material captured the facts, and an inferred detail
+("~1h") was flagged rather than assumed.*
+
+**Why this matters:** a project without a current next action is a stalled promise. Here the harness
+keeps the promise live across days, doing the bookkeeping, while you only ever supply judgment and
+report reality.
 
 ---
 

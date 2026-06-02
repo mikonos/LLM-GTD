@@ -54,7 +54,7 @@ description: |
 
 | 用户意图 | 读取 | 核心动作 |
 |---|---|---|
-| **搭建 / 自检系统** | `init/SKILL.md` | 幂等建八清单 + 适配层自检 + 可选导入旧数据 |
+| **搭建 / 自检系统** | `init/SKILL.md` | 幂等建八清单 + 安装/刷新 Codex slash 命令 + 适配层自检 + 可选导入旧数据 |
 | **新输入要落盘** | `capture/SKILL.md` | 零摩擦落盘 inbox，**单条默认自动 clarify 归位**；批量先全捕捉再批量理清 |
 | **理清收件箱** | `clarify/SKILL.md` | 决策树：可行动吗 → 2分钟/委派/推迟/项目；不可行动 → 垃圾/someday/reference |
 | **结构卫生（AI 自动）** | `organize/SKILL.md` | 机械类（完成项目/孤儿/stalled/情境/死勾/重复）自动修，只把需拍板的浮上来；engage/review 前自动先扫 |
@@ -113,3 +113,4 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 - v1（2026-06-02）：六命令包 + memory/gtd/ 八清单 + 三平台适配。决策：不管旧 open loops，按 GTD 第一性原理重建（项目决策）。详见 `references/evolution-log.md`。
 - v1.6（2026-06-02）：review 升级为 AI 预回顾包，新增只读 `scripts/gtd_review_prep.sh`。
 - v1.7（2026-06-02）：GTD 内部标题引用统一改为 Obsidian heading link：`[[文件名#标题|标题]]`，避免裸 `[[标题]]` 被误建成独立文件。
+- v1.8（2026-06-02）：`gtd_init.sh` 内置 Codex slash 命令安装/刷新；单独跑 init 也能补齐 `/gtd*`。

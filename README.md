@@ -53,7 +53,7 @@ agent-native.
 
 | You want to... | Command | What happens |
 |---|---|---|
-| set up the trusted system | `gtd-init` | creates the eight GTD lists and checks wiring |
+| set up the trusted system | `gtd-init` | creates the eight GTD lists, installs/refreshes Codex slash prompts, and checks wiring |
 | capture a thought or task | `gtd-capture` | writes it to inbox first, then auto-clarifies small inputs |
 | process inbox items | `gtd-clarify` | turns vague "stuff" into next actions, projects, waiting-for, reference, or someday |
 | clean the system | `gtd-organize` | fixes mechanical drift: orphan actions, stalled projects, bad contexts, duplicates |

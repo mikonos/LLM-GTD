@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# gtd_init.sh — 幂等搭建 GTD 可信系统（memory/gtd/ 八清单）+ 自检适配层
+# gtd_init.sh — 幂等搭建 GTD 可信系统（memory/gtd/ 八清单）+ 安装/刷新 Codex slash 命令 + 自检适配层
 #
 # 用法：
-#   bash gtd_init.sh                 # 幂等建八清单 + 自检（已存在的不覆盖）
+#   bash gtd_init.sh                 # 幂等建八清单 + 安装/刷新 Codex /gtd* + 自检（已存在清单不覆盖）
 #   bash gtd_init.sh --import-legacy # 额外：一次性从旧 memory/open loops.md 导入（旧文件不改）
 #   bash gtd_init.sh --status        # 只做自检与就绪报告，不写文件
 #
@@ -13,9 +13,14 @@ set -euo pipefail
 
 # ── 定位 Vault 根（脚本在 VAULT/.cursor/skills/gtd-harness/scripts/）──
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 VAULT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 GTD_DIR="$VAULT_ROOT/memory/gtd"
 LEGACY_FILE="$VAULT_ROOT/memory/open loops.md"
+CODEX_HOME_DIR="${CODEX_HOME:-$HOME/.codex}"
+CODEX_PROMPTS_DIR="$CODEX_HOME_DIR/prompts"
+CODEX_PROMPT_TEMPLATES="$SKILL_DIR/templates/codex-prompts"
+CODEX_PROMPT_FILES="gtd.md gtd-init.md gtd-capture.md gtd-clarify.md gtd-organize.md gtd-engage.md gtd-review.md"
 
 IMPORT_LEGACY=0
 STATUS_ONLY=0
@@ -66,6 +71,56 @@ selfcheck() {
   if [ -f "$chk" ]; then
     echo "  ℹ️  深度校验可跑：bash .codex/scripts/check-agent-dirs.sh"
   fi
+
+  local missing_codex=0
+  local prompt
+  for prompt in $CODEX_PROMPT_FILES; do
+    if [ ! -f "$CODEX_PROMPTS_DIR/$prompt" ]; then
+      missing_codex=$((missing_codex+1))
+    fi
+  done
+  if [ "$missing_codex" -eq 0 ]; then
+    echo "  ✅ Codex slash 命令可达：$CODEX_PROMPTS_DIR/gtd*.md"
+  else
+    echo "  ⚠️  Codex slash 命令缺失 $missing_codex 个：$CODEX_PROMPTS_DIR/gtd*.md（正常 init 会自动安装/刷新）"
+  fi
+  if [ -d "$CODEX_PROMPT_TEMPLATES" ]; then
+    echo "  ✅ Codex prompt 模板可达：.cursor/skills/gtd-harness/templates/codex-prompts/"
+  else
+    echo "  ⚠️  Codex prompt 模板缺失：.cursor/skills/gtd-harness/templates/codex-prompts/"
+  fi
+}
+
+# ── 安装/刷新 Codex slash 命令（全局 CODEX_HOME 级）──
+install_codex_prompts() {
+  if [ ! -d "$CODEX_PROMPT_TEMPLATES" ]; then
+    echo "  ⚠️  未找到 Codex prompt 模板，跳过：${CODEX_PROMPT_TEMPLATES#$VAULT_ROOT/}"
+    return 0
+  fi
+  mkdir -p "$CODEX_PROMPTS_DIR"
+
+  local installed=0
+  local updated=0
+  local unchanged=0
+  local prompt src dst
+  for prompt in $CODEX_PROMPT_FILES; do
+    src="$CODEX_PROMPT_TEMPLATES/$prompt"
+    dst="$CODEX_PROMPTS_DIR/$prompt"
+    if [ ! -f "$src" ]; then
+      echo "  ⚠️  模板缺失：$prompt"
+      continue
+    fi
+    if [ -f "$dst" ] && cmp -s "$src" "$dst"; then
+      unchanged=$((unchanged+1))
+    elif [ -f "$dst" ]; then
+      cp "$src" "$dst"
+      updated=$((updated+1))
+    else
+      cp "$src" "$dst"
+      installed=$((installed+1))
+    fi
+  done
+  echo "  ✅ Codex slash 命令 → ${CODEX_PROMPTS_DIR}/（新装 ${installed}，更新 ${updated}，未变 ${unchanged}）"
 }
 
 # ── 可选：从旧 open loops.md 导入（旧文件只读，不改）──
@@ -263,6 +318,10 @@ if [ "$IMPORT_LEGACY" -eq 1 ]; then
   echo "── 可选导入（旧 open loops.md 只读）──"
   import_legacy
 fi
+
+echo ""
+echo "── 安装/刷新 Codex slash 命令（全局）──"
+install_codex_prompts
 
 selfcheck
 

@@ -1,6 +1,6 @@
 ---
 name: gtd-init
-description: GTD harness 场景命令 · 搭建/自检可信系统。幂等建 memory/gtd/ 八清单 + 适配层自检 + 可选导入旧 open loops。首次运行入口。
+description: GTD harness 场景命令 · 搭建/自检可信系统。幂等建 memory/gtd/ 八清单 + 安装/刷新 Codex slash 命令 + 适配层自检 + 可选导入旧 open loops。首次运行入口。
 parent: gtd-harness
 ---
 
@@ -20,7 +20,7 @@ parent: gtd-harness
    ```
    bash .cursor/skills/gtd-harness/scripts/gtd_init.sh
    ```
-   它会建齐 `memory/gtd/` 八清单（含情境骨架与 Horizons 模板）并自检适配层。
+  它会建齐 `memory/gtd/` 八清单（含情境骨架与 Horizons 模板），安装/刷新 `~/.codex/prompts/gtd*.md`，并自检适配层。
 
 2. **只自检不写文件**：`bash …/scripts/gtd_init.sh --status`
 
@@ -34,6 +34,7 @@ parent: gtd-harness
 
 ## 质量检查
 - [ ] 八清单文件齐全（`bash …/scripts/gtd_status.sh` 能跑出 dashboard）
+- [ ] Codex slash 命令齐全（`~/.codex/prompts/gtd*.md`，含 `/gtd` 主入口）
 - [ ] 重跑只跳过、不覆盖（幂等）
 - [ ] 若导入：旧 `open loops.md` 字节不变（可 `md5` 前后比对）
 - [ ] 自检如报「真源/入口缺失」→ 提示需完成 Phase 2/3（SKILL.md 与符号链接）

@@ -47,7 +47,7 @@ David Allen 给了我们管理承诺的操作系统。LLM-GTD 把这套操作系
 
 | 你想要 | 命令 | 它会做什么 |
 |---|---|---|
-| 搭建可信系统 | `gtd-init` | 创建八张 GTD 清单并检查接线 |
+| 搭建可信系统 | `gtd-init` | 创建八张 GTD 清单，安装/刷新 Codex slash prompts，并检查接线 |
 | 捕捉一个想法或任务 | `gtd-capture` | 先写入 inbox，再自动理清小输入 |
 | 清理收件箱 | `gtd-clarify` | 把模糊的 stuff 变成 next action、project、waiting-for、reference 或 someday |
 | 整理系统结构 | `gtd-organize` | 修复机械漂移：孤儿行动、停滞项目、错误情境、重复项 |
@@ -203,6 +203,8 @@ LLM-GTD 会先捕捉所有内容，再理清可以安全推断的部分：
 
 如果 agent 无法安全判断你的承诺，它会问，而不是装作知道。
 
+→ 完整五步走查 + 头牌案例（一个会随你汇报而自动推进的项目）：[docs/demo.zh-CN.md](docs/demo.zh-CN.md)。
+
 ## 仓库结构
 
 ```text
@@ -212,6 +214,7 @@ src/codex-prompts/    Codex slash prompts
 src/codex-agents/     Codex orchestrator agent
 snippets/             Cursor 和 AGENTS.md 的可选路由片段
 docs/design.md        架构和设计说明
+docs/demo.zh-CN.md    五步走查 + 头牌案例（中文）
 install.sh            安装脚本
 CHANGELOG.md          项目更新日志
 ```

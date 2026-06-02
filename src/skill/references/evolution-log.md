@@ -51,6 +51,11 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 - **例子**：项目引用 `[[projects#项目名|项目名]]`；支持材料引用 `[[reference#条目名|条目名]]`。
 - **边界**：裸 `[[文件名]]` 仍用于真实独立文件，例如 `[[projects]]`、`[[next-actions]]`。
 
+## v1.8 — init 内置 Codex slash 命令安装/刷新
+- `gtd_init.sh` 新增 `~/.codex/prompts/gtd*.md` 安装/刷新逻辑，从 skill 包内 `templates/codex-prompts/` 读取模板。
+- `--status` 自检会报告 Codex slash 命令是否齐全。
+- `install.sh` 会把 `src/codex-prompts/` 同步进已安装 skill 包，保证单独跑 init 也能补齐 `/gtd*`。
+
 ---
 
 **AI 自动化总览**：capture→clarify 自动、organize（机械）自动；review 先预处理；engage 给候选，用户保留承诺、选择与反思。

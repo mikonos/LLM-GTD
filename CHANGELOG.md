@@ -2,6 +2,10 @@
 
 All notable changes. See `src/skill/references/evolution-log.md` for the in-skill log.
 
+## v1.8 — Init installs Codex slash prompts
+`gtd_init.sh` now installs or refreshes `~/.codex/prompts/gtd*.md` from bundled templates,
+so running init alone can restore the Codex `/gtd` command set.
+
 ## v1.7 — Obsidian heading links for internal GTD references
 Internal references to headings inside `memory/gtd/` now use `[[file#heading|heading]]`
 to avoid accidentally creating standalone Obsidian files.

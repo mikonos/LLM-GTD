@@ -1,7 +1,7 @@
 {
-  "name": "gtd-harness",
+  "name": "llm-gtd",
   "version": "1.9.0",
-  "description": "A portable GTD harness for Codex that keeps commitments in plain Markdown lists.",
+  "description": "LLM-GTD is a portable GTD trusted system for Codex that keeps commitments in plain Markdown lists.",
   "author": {
     "name": "mikonos",
     "url": "https://github.com/mikonos"
@@ -19,9 +19,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "GTD Harness",
+    "displayName": "LLM-GTD",
     "shortDescription": "Run a GTD trusted system from plain Markdown lists.",
-    "longDescription": "GTD Harness helps Codex capture, clarify, organize, engage, and review commitments in a durable plain-Markdown GTD system. It initializes eight GTD lists under memory/gtd/, keeps calendar writes confirmation-gated, and uses Google Calendar only when an existing calendar integration is available.",
+    "longDescription": "LLM-GTD helps Codex capture, clarify, organize, engage, and review commitments in a durable plain-Markdown GTD system. It initializes eight GTD lists under memory/gtd/, keeps calendar writes confirmation-gated, and uses Google Calendar only when an existing calendar integration is available.",
     "developerName": "mikonos",
     "category": "Productivity",
     "capabilities": [

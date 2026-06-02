@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "gtd-harness",
+      "name": "llm-gtd",
       "source": {
         "source": "local",
-        "path": "./plugins/gtd-harness"
+        "path": "./plugins/llm-gtd"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -5,7 +5,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SRC_SKILL="$REPO_ROOT/src/skill"
-PLUGIN_ROOT="$REPO_ROOT/plugins/gtd-harness"
+PLUGIN_ROOT="$REPO_ROOT/plugins/llm-gtd"
 DEST_SKILL="$PLUGIN_ROOT/skills/gtd-harness"
 
 if [ ! -f "$SRC_SKILL/SKILL.md" ]; then

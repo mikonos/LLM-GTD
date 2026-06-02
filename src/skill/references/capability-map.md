@@ -9,7 +9,7 @@
 |---|---|---|---|
 | **Claude Code** | SessionStart 加载 skill 列表（读 description） | Skill tool；或 `.claude/commands/gtd*.md` 薄命令 | `.claude/commands/` → `.cursor/skills/` |
 | **Cursor** | `beforeSubmitPrompt` Hook 读 `.cursor/skill-rules.json` 的 `gtd-harness` 关键词/意图 → 写 `skill-suggestions.md` → `auto-activation.mdc` 强制消费 | 读 `.cursor/skills/gtd-harness/SKILL.md` 按流程执行 | `.cursor/skills/`（真源原位） |
-| **Codex** | 安装 `gtd-harness` 插件；旧路径可继续用全局 `/gtd*` prompts | 直接调用插件 skill；旧 prompt 读取 `.cursor/skills/gtd-harness/SKILL.md` | 插件内 `skills/gtd-harness/`；旧安装为 `.cursor/skills/` |
+| **Codex** | 安装 `llm-gtd` 插件；旧路径可继续用全局 `/gtd*` prompts | 直接调用插件 skill；旧 prompt 读取 `.cursor/skills/gtd-harness/SKILL.md` | 插件内 `skills/gtd-harness/`；旧安装为 `.cursor/skills/` |
 
 ## intent 动词 → 各平台原生工具
 
@@ -47,7 +47,7 @@ GTD 铁律：**绝不维护双日历。** 一旦真实 Google Calendar 可达，
 1. **状态层零适配**：`memory/gtd/` 是纯 markdown 文件——文件就是文件，三平台读写同一份，无需翻译。多机可经云盘同步（与既有 `open loops.md` 同一风险模型）。
 2. **逻辑层单一真源**：公开仓库只改 `src/skill/`，再同步到 Codex plugin；旧安装仍复制到 `.cursor/skills/gtd-harness/`。
 3. **SKILL.md 中立**：主流程不绑定某个本机命令；新增步骤只写 intent，翻译查本表。
-4. **插件状态隔离**：`plugins/gtd-harness/` 只打包 skill 逻辑，不打包任何用户 `memory/gtd/` 状态。
+4. **插件状态隔离**：`plugins/llm-gtd/` 只打包 skill 逻辑，不打包任何用户 `memory/gtd/` 状态。
 
 ## 自检命令
 
@@ -57,5 +57,5 @@ cat .cursor/skills/gtd-harness/SKILL.md        # codex 路径可达
 find -L .claude/skills -name gtd-harness -type d   # cc 符号链接解析
 bash .cursor/skills/gtd-harness/scripts/gtd_init.sh --status   # 三入口自检报告
 bash .cursor/skills/gtd-harness/scripts/gtd_review_prep.sh     # 只读生成 review 预回顾包
-LLM_GTD_ROOT=/tmp/llm-gtd-test bash plugins/gtd-harness/skills/gtd-harness/scripts/gtd_init.sh
+LLM_GTD_ROOT=/tmp/llm-gtd-test bash plugins/llm-gtd/skills/gtd-harness/scripts/gtd_init.sh
 ```

@@ -8,8 +8,8 @@ Not a todo app. Not another productivity prompt. LLM-GTD is a trusted external s
 Claude Code, Cursor, and Codex help you capture, clarify, organize, choose, and review your work
 without turning your life into a pile of half-processed tasks.
 
-> The installable skill is named `gtd-harness`.
-> **LLM-GTD** is the project and repository name.
+> The installable Codex plugin is named `llm-gtd`.
+> The legacy skill package remains `gtd-harness` for Cursor and manual installs.
 
 ## See it in one example
 
@@ -117,7 +117,7 @@ The same skill package and the same `memory/gtd/` state can be used from multipl
 |---|---|---|
 | Claude Code | `.claude/commands/gtd*.md` | same `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` plus keyword rules | same `memory/gtd/` |
-| Codex | Codex plugin `gtd-harness`; legacy `~/.codex/prompts/gtd*.md` also works | same `memory/gtd/` |
+| Codex | Codex plugin `llm-gtd`; legacy `~/.codex/prompts/gtd*.md` also works | same `memory/gtd/` |
 
 ## Why It Is Different
 
@@ -146,18 +146,19 @@ LLM-GTD now includes a repo-scoped Codex plugin package:
 
 ```text
 .agents/plugins/marketplace.json
-plugins/gtd-harness/
+plugins/llm-gtd/
 ```
 
-Add this repository as a Codex plugin marketplace, then install `gtd-harness` from the Codex
+Add this repository as a Codex plugin marketplace, then install `llm-gtd` from the Codex
 plugin directory:
 
 ```bash
 codex plugin marketplace add https://github.com/mikonos/LLM-GTD.git
+codex plugin add llm-gtd@llm-gtd
 ```
 
 After installing the plugin, start Codex in the workspace where you want your GTD state to live and
-ask it to use `gtd-harness`:
+ask it to use LLM-GTD:
 
 ```text
 Set up my GTD trusted system
@@ -265,7 +266,7 @@ If the agent cannot safely infer your commitment, it asks instead of pretending.
 
 ```text
 src/skill/            core gtd-harness skill package
-plugins/gtd-harness/  Codex plugin package generated from src/skill/
+plugins/llm-gtd/      Codex plugin package generated from src/skill/
 .agents/plugins/      repo-scoped Codex marketplace
 scripts/              repository maintenance scripts
 src/claude-commands/  Claude Code slash commands

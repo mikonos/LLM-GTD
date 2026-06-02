@@ -6,8 +6,8 @@
 
 它不是 todo app，也不是又一个效率提示词。LLM-GTD 是一套可信外部系统，让 Claude Code、Cursor 和 Codex 可以帮你收集、理清、组织、选择和回顾任务，同时不把你的生活变成一堆半处理的待办。
 
-> 可安装的 skill 名叫 `gtd-harness`。
-> **LLM-GTD** 是项目名和仓库名。
+> 可安装的 Codex 插件名叫 `llm-gtd`。
+> 旧版 skill 包继续叫 `gtd-harness`，用于兼容 Cursor 和手动安装。
 
 ## 一个例子先感受下
 
@@ -109,7 +109,7 @@ Harness
 |---|---|---|
 | Claude Code | `.claude/commands/gtd*.md` | 同一份 `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` + keyword rules | 同一份 `memory/gtd/` |
-| Codex | Codex 插件 `gtd-harness`；旧版 `~/.codex/prompts/gtd*.md` 仍可用 | 同一份 `memory/gtd/` |
+| Codex | Codex 插件 `llm-gtd`；旧版 `~/.codex/prompts/gtd*.md` 仍可用 | 同一份 `memory/gtd/` |
 
 ## 它和普通方案有什么不同
 
@@ -137,16 +137,17 @@ LLM-GTD 现在包含 repo 级 Codex 插件包：
 
 ```text
 .agents/plugins/marketplace.json
-plugins/gtd-harness/
+plugins/llm-gtd/
 ```
 
-把这个仓库加入 Codex 插件 marketplace，然后在 Codex 插件目录里安装 `gtd-harness`：
+把这个仓库加入 Codex 插件 marketplace，然后在 Codex 插件目录里安装 `llm-gtd`：
 
 ```bash
 codex plugin marketplace add https://github.com/mikonos/LLM-GTD.git
+codex plugin add llm-gtd@llm-gtd
 ```
 
-安装后，在你想存放 GTD 状态的工作区里启动 Codex，并让它使用 `gtd-harness`：
+安装后，在你想存放 GTD 状态的工作区里启动 Codex，并让它使用 LLM-GTD：
 
 ```text
 Set up my GTD trusted system
@@ -253,7 +254,7 @@ LLM-GTD 会先捕捉所有内容，再理清可以安全推断的部分：
 
 ```text
 src/skill/            gtd-harness 核心 skill 包
-plugins/gtd-harness/  由 src/skill/ 生成的 Codex 插件包
+plugins/llm-gtd/      由 src/skill/ 生成的 Codex 插件包
 .agents/plugins/      repo 级 Codex marketplace
 scripts/              仓库维护脚本
 src/claude-commands/  Claude Code slash commands

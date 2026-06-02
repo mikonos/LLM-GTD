@@ -333,7 +333,7 @@ if [ "$GTD_LEGACY_VAULT_INSTALL" -eq 1 ]; then
 else
   echo ""
   echo "── Codex 插件模式 ──"
-  echo "  跳过旧全局 slash prompt 安装；请从 Codex 插件入口调用 gtd-harness。"
+  echo "  跳过旧全局 slash prompt 安装；请从 Codex 插件入口调用 LLM-GTD。"
 fi
 
 selfcheck

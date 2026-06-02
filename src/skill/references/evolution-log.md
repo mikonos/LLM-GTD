@@ -57,7 +57,7 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 - `install.sh` 会把 `src/codex-prompts/` 同步进已安装 skill 包，保证单独跑 init 也能补齐 `/gtd*`。
 
 ## v1.9 — Codex plugin package
-- 新增公开 Codex plugin 打包路径：repo marketplace 指向 `plugins/gtd-harness/`，插件 skill 由 `src/skill/` 同步生成。
+- 新增公开 Codex plugin 打包路径：repo marketplace 指向 `plugins/llm-gtd/`，插件 skill 由 `src/skill/` 同步生成。
 - 脚本状态根解析改为三段：`LLM_GTD_ROOT` 明确指定 → 旧 `.cursor/skills/gtd-harness/` 安装自动定位 vault → 否则使用当前工作区，适配 Codex 插件模式。
 - 插件包只包含 skill 逻辑，不包含用户 `memory/gtd/` 状态；Google Calendar 仍是可选外部能力，不内置 app/MCP。
 

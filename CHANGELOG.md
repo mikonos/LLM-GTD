@@ -3,7 +3,7 @@
 All notable changes. See `src/skill/references/evolution-log.md` for the in-skill log.
 
 ## v1.9 — Codex plugin package
-Added a repo-scoped Codex plugin package under `plugins/gtd-harness/` plus
+Added a repo-scoped Codex plugin package under `plugins/llm-gtd/` plus
 `.agents/plugins/marketplace.json`, generated from `src/skill/` by
 `scripts/sync_codex_plugin.sh`. GTD scripts now support `LLM_GTD_ROOT`, legacy
 `.cursor` installs, and Codex plugin mode where the current workspace is the

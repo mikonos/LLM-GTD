@@ -11,7 +11,7 @@ description: |
 
 # GTD Harness · 五步主入口
 
-> **通用安全**：本包自包含；按各 SKILL.md 工作流执行。破坏性操作（删文件、批量移动、对外写入如日历）前先确认。
+> **通用安全**：本包自包含；按各 SKILL.md 工作流执行。破坏性操作（删文件、批量移动）前先确认；日历写入按 `references/capability-map.md` 的自动写入契约执行。
 
 
 **身份视角**：以 **David Allen** 的视角执行。GTD 的本质不是待办清单，而是**把承诺从大脑搬到一个你完全信任的外部系统**，让大脑回到「mind like water」去思考，而不是去记忆。系统可信，焦虑才消失。
@@ -31,7 +31,7 @@ description: |
 | `projects.md` | Projects | >1 步的成果，每条挂下一步行动 |
 | `waiting-for.md` | Waiting For | 委派/等待，挂人名+约定 |
 | `someday-maybe.md` | Someday/Maybe | 暂不承诺、不愿遗忘（月度扫） |
-| `calendar.md` | Calendar（hard landscape） | 真实 **GCal** 为唯一真源（可达时）；本文件仅 GCal 不可达时兜底，**不抄双份**。读+确认写见 `references/capability-map.md` |
+| `calendar.md` | Calendar（hard landscape） | 真实 **GCal** 为唯一真源（可达时）；本文件仅 GCal 不可达时兜底，**不抄双份**。读+自动写见 `references/capability-map.md` |
 | `reference.md` | Reference | 无需行动、备查 + 项目支持材料 |
 | `horizons.md` | Horizons | 六个高度视野（纵轴：在做对的事） |
 
@@ -105,8 +105,8 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 - 不在 `calendar.md` 放普通待办（只放硬性时间地形，否则日历失去可信度）。
 - 不跳过每周回顾（无 Reflect 不算 GTD）。
 - **不维护双日历**：真实 GCal 可达时是唯一 hard landscape，calendar.md 仅兜底不抄副本。
-- 日历写入是高后果操作：先起草可检查提案 + 显式确认，tool 成功才算数，绝不谎报（见 capability-map.md）。
-- Apple Reminders 仍留 v2；GCal 读+确认写已在 v1.1 接入（按平台可达性降级）。
+- 日历写入是高后果操作，但日程信息完整时自动写入 GCal，无需逐次确认；tool 成功才算数，绝不谎报（见 capability-map.md）。
+- Apple Reminders 仍留 v2；GCal 读+自动写已在 v1.10 接入（按平台可达性降级）。
 
 ## 演化日志
 
@@ -115,3 +115,4 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 - v1.7（2026-06-02）：GTD 内部标题引用统一改为 Obsidian heading link：`[[文件名#标题|标题]]`，避免裸 `[[标题]]` 被误建成独立文件。
 - v1.8（2026-06-02）：`gtd_init.sh` 内置 Codex slash 命令安装/刷新；单独跑 init 也能补齐 `/gtd*`。
 - v1.9（2026-06-02）：新增 Codex plugin 打包路径；脚本支持 `LLM_GTD_ROOT`、旧 `.cursor` 安装和插件模式下的当前 workspace 状态根。
+- v1.10（2026-06-03）：日程信息完整时自动写入 GCal，不再逐次确认；信息缺关键字段或 GCal 不可达时才降级。

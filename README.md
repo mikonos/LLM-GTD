@@ -38,7 +38,7 @@ LLM-GTD gives the agent a harness:
 - a full GTD workflow, not just inbox triage
 - six commands: `init`, `capture`, `clarify`, `organize`, `engage`, `review`
 - one shared trusted system across Claude Code, Cursor, and Codex
-- confirmation gates for calendar writes and other high-consequence actions
+- automatic Google Calendar writes for complete schedule items, with fail-closed reporting
 
 The model does what it is good at: drafting next actions, cleaning structure, spotting stale items,
 and preparing reviews.
@@ -135,8 +135,9 @@ Drafting a concrete next action, finding stale projects, and cleaning list struc
 Choosing what you value and what you commit to are not.
 
 **It fails closed around calendar writes.**
-If Google Calendar is connected, it is the only hard landscape. Calendar writes require a checkable
-proposal and explicit confirmation. If the tool fails, LLM-GTD does not pretend anything happened.
+If Google Calendar is connected, it is the only hard landscape. Complete schedule items are written
+to Google Calendar automatically; missing date/time/title fields are clarified first. If the tool
+fails, LLM-GTD does not pretend anything happened.
 
 ## Install
 
@@ -218,7 +219,7 @@ It also prints two optional manual wiring steps:
 - Bash
 - Python 3 for status/dashboard helpers
 - Claude Code, Cursor, or Codex, depending on which surface you use
-- Optional: Google Calendar access if you want real calendar reads and confirmed writes
+- Optional: Google Calendar access if you want real calendar reads and automatic writes
 
 ## Quick Start
 

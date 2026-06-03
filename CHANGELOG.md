@@ -2,6 +2,12 @@
 
 All notable changes. See `src/skill/references/evolution-log.md` for the in-skill log.
 
+## v1.10 — GCal auto-write
+Complete schedule items now write directly to Google Calendar without per-event
+confirmation. Missing date/time/title fields are clarified first; unavailable or
+failed GCal writes fall back to `memory/gtd/calendar.md` and are never reported
+as successful.
+
 ## v1.9 — Codex plugin package
 Added a repo-scoped Codex plugin package under `plugins/llm-gtd/` plus
 `.agents/plugins/marketplace.json`, generated from `src/skill/` by

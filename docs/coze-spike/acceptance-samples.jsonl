@@ -1,0 +1,20 @@
+{"id":1,"input":"打开 Laura 支持材料和周计划现有材料，确认周计划需求卡目标文件与 5 条不可丢约束","expected_type":"next_action","expected_context":"@computer","expected_project":"交付 Laura 式周计划需求卡","must_confirm":false}
+{"id":2,"input":"检索“随手记”功能现有材料，确认需求卡目标文件和可引用来源","expected_type":"next_action","expected_context":"@computer","expected_project":"交付“随手记”功能需求卡","must_confirm":false}
+{"id":3,"input":"筛选 2-3 个适合女儿的乒乓球课选项，记录每周两次、每次约 1 小时的可选时段、费用、距离和试课方式","expected_type":"next_action","expected_context":"@computer","expected_project":"培养女儿的乒乓球兴趣与训练路径","must_confirm":false}
+{"id":4,"input":"培养女儿的乒乓球兴趣与训练路径","expected_type":"project","expected_project":"培养女儿的乒乓球兴趣与训练路径","must_create_desired_outcome":true,"must_create_next_action":true,"must_confirm":false}
+{"id":5,"input":"Laura 式周计划需求约束","expected_type":"reference_or_zk_route","must_not_enter_action_lists":true,"must_confirm":false}
+{"id":6,"input":"记得明天下午 3 点在测试日历上约 30 分钟 GTD Spike 复盘","expected_type":"calendar_intent","resolved_start_time":"2026-06-04T15:00:00+08:00","resolved_end_time":"2026-06-04T15:30:00+08:00","must_confirm":false,"calendar_scope":"test_only"}
+{"id":7,"input":"下周五上午 10 点提醒我检查 Coze 数据表状态","expected_type":"calendar_intent","resolved_start_time":"2026-06-12T10:00:00+08:00","must_confirm":false,"calendar_scope":"test_only"}
+{"id":8,"input":"给 Coze 测试 bot 写一版 clarify prompt","expected_type":"next_action","expected_context":"@computer","must_confirm":false}
+{"id":9,"input":"问叶云 Google Calendar connector OAuth 怎么配","expected_type":"next_action_or_waiting_for","expected_context":"@computer","if_waiting_for_must_confirm":true}
+{"id":10,"input":"等 Coze 官方文档确认 database node 是否支持 update/delete","expected_type":"waiting_for","expected_person":"Coze 官方文档/平台能力核验","allow_needs_clarification_if_person_missing":true,"must_confirm":false}
+{"id":11,"input":"把 Coze 和 Supabase 的差异写成判断卡","expected_type":"project_or_next_action","if_project_must_create_next_action":true,"must_confirm":false}
+{"id":12,"input":"Coze 真源如果不能导出就会有平台锁定风险","expected_type":"reference_or_zk_route","must_not_enter_action_lists":true,"must_confirm":false}
+{"id":13,"input":"这个想法以后也许能做成个人生产力 SaaS","expected_type":"someday","must_not_create_active_project":true,"must_confirm":false}
+{"id":14,"input":"删除所有旧的 GTD 测试数据","expected_type":"delete_request","must_confirm":true,"must_not_delete_automatically":true}
+{"id":15,"input":"帮我处理一下 Coze","expected_type":"needs_clarification","reason_contains":"vague action","must_confirm":false}
+{"id":16,"input":"给测试日历创建一个 2026-06-10 14:00-15:00 的假会议","expected_type":"calendar_intent","resolved_start_time":"2026-06-10T14:00:00+08:00","resolved_end_time":"2026-06-10T15:00:00+08:00","must_confirm":false,"calendar_scope":"test_only"}
+{"id":17,"input":"这个任务 2 分钟内能做：打开 Coze 控制台看 workspace 是否存在","expected_type":"two_minute_suggestion","must_not_claim_completed":true,"must_confirm":false}
+{"id":18,"input":"以后每个月复盘一次 GTD 产品化方向","expected_type":"needs_clarification","reason_contains":"missing start time","must_confirm":false}
+{"id":19,"input":"把 Hosted Coze 路线和自建 Postgres 路线做风险对比","expected_type":"project_or_next_action","if_project_must_create_next_action":true,"must_confirm":false}
+{"id":20,"input":"这条已经过期：昨天提醒我看 Coze 文档","expected_type":"discard_or_needs_clarification","resolved_past_date":"2026-06-02","must_not_discard_if_uncertain":true,"must_confirm_if_discard_uncertain":true}

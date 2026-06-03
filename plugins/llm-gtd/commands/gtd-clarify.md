@@ -14,6 +14,6 @@ allowed-tools:
 状态在**当前工作区**的 `memory/gtd/`（不存在先跑 `bash ${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/scripts/gtd_init.sh`，它会写到当前工作区）。
 intent→工具翻译见 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/references/capability-map.md`。
 
-对 inbox 每项跑决策树（可行动→2分钟/委派/推迟/项目；不可行动→垃圾/someday/reference），落到正确清单后从 inbox 删除；特定时间事→真实日历需确认写。
+对 inbox 每项跑决策树（可行动→2分钟/委派/推迟/项目；不可行动→垃圾/someday/reference），落到正确清单后从 inbox 删除；特定时间事→真实日历可达且信息完整则自动写，缺关键字段或写入失败则降级。
 
 输入：$ARGUMENTS

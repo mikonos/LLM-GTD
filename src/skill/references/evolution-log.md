@@ -16,7 +16,7 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 ## v1.1 — 日历复用（GCal 读+确认写）
 - **单一日历**：真实 Google Calendar 可达时为唯一 hard landscape，`calendar.md` 退为不可达兜底，不抄副本（Allen 双日历铁律）。
 - **读**：engage 读今天硬约定、review 读本周 hard landscape，先 GCal、不可达降级。
-- **写（需确认）**：clarify 出特定时间事 → 起草可检查提案 → 显式确认 → 写 GCal；tool 成功才报「已写入」，失败记 calendar.md 兜底，不谎报。
+- **写（旧策略）**：v1.1 曾采用确认门；当前写入规则已由 v1.10 改为完整日程自动写入。
 
 ## v1.2 — Codex slash 命令 + 三平台触发齐活
 - Codex `~/.codex/prompts/gtd*.md`（7 条），vault 感知 fail-soft（Codex prompts 仅全局，无项目级）。
@@ -60,6 +60,11 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 - 新增公开 Codex plugin 打包路径：repo marketplace 指向 `plugins/llm-gtd/`，插件 skill 由 `src/skill/` 同步生成。
 - 脚本状态根解析改为三段：`LLM_GTD_ROOT` 明确指定 → 旧 `.cursor/skills/gtd-harness/` 安装自动定位 vault → 否则使用当前工作区，适配 Codex 插件模式。
 - 插件包只包含 skill 逻辑，不包含用户 `memory/gtd/` 状态；Google Calendar 仍是可选外部能力，不内置 app/MCP。
+
+## v1.10 — GCal 自动写入
+- **写**：clarify 出特定时间事且日程信息完整 → 直接写 GCal，不再逐次确认。
+- **缺字段**：缺日期、开始时间、事项标题/对象等关键字段时，只问缺失字段；会议缺时长时默认 60 分钟。
+- **失败降级**：GCal 不可达或 tool 失败 → 如实报告，并把时间事记入 `calendar.md` 兜底，继续遵守“不维护双日历”。
 
 ---
 

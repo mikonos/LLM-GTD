@@ -1,0 +1,148 @@
+{
+  "version": "2026-06-03",
+  "purpose": "Hosted Coze schema for the LLM-GTD trusted-system spike.",
+  "base_timezone": "Asia/Shanghai",
+  "global_rules": [
+    "Clarify only writes ai_suggestions and optional confirmation_queue rows.",
+    "High-consequence actions must be confirmed before final state mutation.",
+    "Google Calendar writes must target a dedicated test calendar only.",
+    "Failed tool writes must stay failed with failure_reason.",
+    "Every state change must write audit_logs.",
+    "Every active project must have at least one next action.",
+    "Knowledge and idea inputs use reference_or_zk_route and do not enter GTD action lists."
+  ],
+  "suggestion_types": [
+    "next_action",
+    "project",
+    "waiting_for",
+    "calendar_intent",
+    "someday",
+    "reference_or_zk_route",
+    "discard",
+    "needs_clarification",
+    "two_minute_suggestion",
+    "delete_request"
+  ],
+  "contexts": [
+    "@computer",
+    "@phone",
+    "@errands",
+    "@home",
+    "@agenda-person"
+  ],
+  "tables": [
+    {
+      "name": "inbox_items",
+      "purpose": "Single capture sink.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "raw_text", "type": "text", "required": true},
+        {"name": "source", "type": "string", "required": true},
+        {"name": "captured_at", "type": "datetime", "required": true},
+        {"name": "status", "type": "enum", "required": true, "values": ["captured", "clarified", "discarded", "failed"]}
+      ]
+    },
+    {
+      "name": "ai_suggestions",
+      "purpose": "AI clarify suggestions. This table is not final GTD state.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "inbox_item_id", "type": "string", "required": true, "references": "inbox_items.id"},
+        {"name": "suggestion_type", "type": "enum", "required": true, "values_ref": "suggestion_types"},
+        {"name": "payload_json", "type": "json", "required": true},
+        {"name": "confidence", "type": "number", "required": true},
+        {"name": "reason", "type": "text", "required": true},
+        {"name": "needs_confirmation", "type": "boolean", "required": true},
+        {"name": "created_at", "type": "datetime", "required": true}
+      ]
+    },
+    {
+      "name": "confirmation_queue",
+      "purpose": "Gate high-consequence actions and commitment decisions.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "suggestion_id", "type": "string", "required": true, "references": "ai_suggestions.id"},
+        {"name": "action_type", "type": "enum", "required": true, "values": ["calendar_write", "delete_or_discard", "delegate_or_notify", "kill_project", "start_someday", "change_committed_time", "manual_compensation"]},
+        {"name": "risk_reason", "type": "text", "required": true},
+        {"name": "status", "type": "enum", "required": true, "values": ["pending", "confirmed", "rejected", "expired", "failed"]},
+        {"name": "confirmed_at", "type": "datetime", "required": false}
+      ]
+    },
+    {
+      "name": "projects",
+      "purpose": "Outcomes that require more than one step.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "title", "type": "string", "required": true},
+        {"name": "desired_outcome", "type": "text", "required": true},
+        {"name": "status", "type": "enum", "required": true, "values": ["active", "stalled", "completed", "dropped"]},
+        {"name": "created_at", "type": "datetime", "required": true}
+      ],
+      "invariants": [
+        "Each active project must have at least one next_actions row."
+      ]
+    },
+    {
+      "name": "next_actions",
+      "purpose": "Concrete single-step actions grouped by context.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "title", "type": "string", "required": true},
+        {"name": "context", "type": "enum", "required": true, "values_ref": "contexts"},
+        {"name": "project_id", "type": "string", "required": false, "references": "projects.id"},
+        {"name": "status", "type": "enum", "required": true, "values": ["active", "done", "dropped"]},
+        {"name": "source_inbox_id", "type": "string", "required": true, "references": "inbox_items.id"}
+      ],
+      "invariants": [
+        "Action title must use a concrete verb.",
+        "Do not use empty verbs such as handle, follow up, process, or research without a concrete physical action."
+      ]
+    },
+    {
+      "name": "waiting_for",
+      "purpose": "Delegated or pending items.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "title", "type": "string", "required": true},
+        {"name": "person", "type": "string", "required": true},
+        {"name": "agreement", "type": "text", "required": true},
+        {"name": "due_date", "type": "date", "required": false},
+        {"name": "status", "type": "enum", "required": true, "values": ["waiting", "received", "cancelled"]}
+      ],
+      "invariants": [
+        "If the system will notify or delegate to another person, confirmation is required first."
+      ]
+    },
+    {
+      "name": "calendar_intents",
+      "purpose": "Pending, confirmed, written, or failed calendar intents.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "title", "type": "string", "required": true},
+        {"name": "start_time", "type": "datetime", "required": true},
+        {"name": "end_time", "type": "datetime", "required": true},
+        {"name": "calendar_id", "type": "string", "required": true},
+        {"name": "status", "type": "enum", "required": true, "values": ["draft", "pending_confirmation", "confirmed", "writing", "written", "failed", "manual_fallback", "manual_compensation_required"]},
+        {"name": "google_event_id", "type": "string", "required": false},
+        {"name": "failure_reason", "type": "text", "required": false}
+      ],
+      "invariants": [
+        "Only confirmed calendar intents may call Google Calendar.",
+        "Only the test calendar id may be used during the spike."
+      ]
+    },
+    {
+      "name": "audit_logs",
+      "purpose": "User-readable product audit, not developer logs.",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "operation", "type": "string", "required": true},
+        {"name": "before_json", "type": "json", "required": false},
+        {"name": "after_json", "type": "json", "required": true},
+        {"name": "actor", "type": "enum", "required": true, "values": ["user", "ai", "workflow", "google_calendar"]},
+        {"name": "created_at", "type": "datetime", "required": true}
+      ]
+    }
+  ]
+}
+

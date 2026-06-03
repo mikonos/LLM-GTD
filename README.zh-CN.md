@@ -34,7 +34,7 @@ LLM-GTD 给 agent 一套 harness：
 - 完整 GTD 工作流，而不只是 inbox triage
 - 六个命令：`init`、`capture`、`clarify`、`organize`、`engage`、`review`
 - Claude Code、Cursor、Codex 共用同一套可信系统
-- 日历写入等高后果动作必须显式确认
+- 日程信息完整时自动写入 Google Calendar，失败按 fail-closed 报告
 
 模型负责它擅长的事：起草下一步行动、清理结构、发现停滞项目、准备每周回顾。
 
@@ -127,7 +127,7 @@ agent 可以替换，状态和工作流留下来。
 决定你要承诺什么、重视什么，不是。
 
 **它对日历写入 fail closed。**
-如果 Google Calendar 已连接，它就是唯一 hard landscape。日历写入必须先给可检查提案，并由用户显式确认。工具失败时，LLM-GTD 不会假装已经完成。
+如果 Google Calendar 已连接，它就是唯一 hard landscape。日程信息完整时自动写入 Google Calendar；缺日期、时间、事项标题等关键字段时先澄清。工具失败时，LLM-GTD 不会假装已经完成。
 
 ## 安装
 

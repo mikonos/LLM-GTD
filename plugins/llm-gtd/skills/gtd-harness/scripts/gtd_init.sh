@@ -262,7 +262,7 @@ seed "$GTD_DIR/calendar.md" <<'EOF'
 > **只放**特定日期/特定时间才有意义的事——会议、约定、deadline、特定日才能做的动作。
 > Allen 铁律：日历是「圣地」，**不放**普通待办（那些归 next-actions）。一放杂事，日历就失去可信度。
 >
-> **单一日历（v1.1）**：真实 **Google Calendar** 可达时它是唯一 hard landscape，engage/review 直接读它，写入需显式确认（见 `references/capability-map.md`）。**本文件仅在 GCal 不可达时兜底**——记下「待手动加入日历」的时间事，**绝不抄 GCal 副本**。Apple Reminders 留 v2。
+> **单一日历（v1.10）**：真实 **Google Calendar** 可达时它是唯一 hard landscape，engage/review 直接读它，日程信息完整时自动写入 GCal（见 `references/capability-map.md`）。**本文件仅在 GCal 不可达时兜底**——记下「待手动加入日历」的时间事，**绝不抄 GCal 副本**。Apple Reminders 留 v2。
 > 兜底格式：`- YYYY-MM-DD [HH:MM] · 事项 · 来源：[[笔记]] · ⚠️待手动加入 GCal`
 
 ## 时间专属事项（兜底 · GCal 不可达时）

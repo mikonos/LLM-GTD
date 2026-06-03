@@ -22,9 +22,9 @@
 | 调度每周回顾提醒 | loop / cron，只触发预回顾包 | 手动节律 | launchd / cron，只调用 `gtd_review_prep.sh` |
 | 反问澄清 | AskUserQuestion | 原生提问 | 文本提问 |
 | **读取 hard landscape（日历）** | google_calendar MCP（list events，需 OAuth）| 原生 GCal 集成 | 已连接的 GCal / MCP |
-| **写入日历事件（需确认）** | google_calendar MCP（create event）| 原生 | 已连接的 GCal / MCP |
+| **写入日历事件（自动）** | google_calendar MCP（create event）| 原生 | 已连接的 GCal / MCP |
 
-## 日历源适配 + 写入确认契约（v1.1）
+## 日历源适配 + 自动写入契约（v1.10）
 
 GTD 铁律：**绝不维护双日历。** 一旦真实 Google Calendar 可达，它就是唯一的 hard landscape；`calendar.md` 只在 GCal 不可达时兜底，**不抄副本**。
 
@@ -36,10 +36,11 @@ GTD 铁律：**绝不维护双日历。** 一旦真实 Google Calendar 可达，
 ```
 > cc 会话内 GCal MCP 需先 OAuth（`mcp__…google_calendar__authenticate`）才出现 list/create 工具；未授权即视为不可达，自动降级。
 
-**写入确认契约（高后果日程变更需显式确认 + fail-closed）**：
-- 写入 = **高后果操作**。LLM 只能**起草**一笔可检查的写入提案，**不得**在 tool 返回成功前声称已写入。
-- 提案必须可检查：**确切事项 + 日期/时间 + 涉及人 + 来源 + 确认问句**。
-- 用户显式确认后才调 GCal create；返回成功 → 报「已写入 GCal」；失败/不可达 → 报「未写入(原因)」并把该时间事记入 `calendar.md` 兜底待手动补，**不谎报**。
+**自动写入契约**：
+- 写入 = **高后果操作**，但日程信息完整时直接调用 GCal create，不再先问确认；**不得**在 tool 返回成功前声称已写入。
+- 可写入的最小信息：**事项标题 + 日期 + 开始时间**。地点、涉及人、来源、备注有则写入描述/地点；会议缺时长时默认 60 分钟。
+- 缺日期、开始时间、事项标题/对象等关键字段时，只问缺失字段，不写入猜测事件。
+- 返回成功 → 报「已写入 GCal」；失败/不可达 → 报「未写入(原因)」并把该时间事记入 `calendar.md` 兜底待手动补，**不谎报**。
 - 区分四态：未尝试 / 尝试失败 / 部分完成 / tool 确认完成。
 
 ## 不变量（保证三平台一致）

@@ -12,4 +12,4 @@
 - **自主链式**：spawn `gtd-orchestrator` agent（`.codex/agents/gtd-orchestrator.toml`）跑完整流程。
 - **自然语言入口**：用户不必指定子命令；直接说一个任务/承诺时，默认走 capture→clarify。
 - **状态**：可信清单在 `memory/gtd/`（八清单，纯 markdown）；`rtk bash .cursor/skills/gtd-harness/scripts/gtd_status.sh` 看全景；每周回顾先跑 `rtk bash .cursor/skills/gtd-harness/scripts/gtd_review_prep.sh`；首次 `… /gtd_init.sh`。
-- **边界**：个人任务系统；日历写入需显式确认（见包内 `references/capability-map.md`）。
+- **边界**：个人任务系统；日程信息完整时自动写入 GCal，缺关键字段或 GCal 不可达时降级（见包内 `references/capability-map.md`）。

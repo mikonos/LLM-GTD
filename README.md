@@ -36,7 +36,7 @@ LLM-GTD gives the agent a harness:
 
 - plain Markdown state in `memory/gtd/`
 - a full GTD workflow, not just inbox triage
-- six commands: `init`, `capture`, `clarify`, `organize`, `engage`, `review`
+- one `/gtd` router plus six workflow commands: `init`, `capture`, `clarify`, `organize`, `engage`, `review`
 - one shared trusted system across Claude Code, Cursor, and Codex
 - automatic Google Calendar writes for complete schedule items, with fail-closed reporting
 
@@ -115,7 +115,7 @@ The same skill package and the same `memory/gtd/` state can be used from multipl
 
 | Platform | Front end | State |
 |---|---|---|
-| Claude Code | plugin `llm-gtd` (skill + `/gtd-*`); or `.claude/commands/gtd*.md` (manual) | same `memory/gtd/` |
+| Claude Code | plugin `llm-gtd` (skill + `/gtd` + `/gtd-*`); or `.claude/commands/gtd*.md` (manual) | same `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` plus keyword rules | same `memory/gtd/` |
 | Codex | Codex plugin `llm-gtd`; legacy `~/.codex/prompts/gtd*.md` also works | same `memory/gtd/` |
 
@@ -150,8 +150,8 @@ This repo is also a Claude Code plugin marketplace. From Claude Code:
 /plugin install llm-gtd@llm-gtd
 ```
 
-The bundled `gtd-harness` skill auto-activates on GTD phrasing, and the `/gtd-*` commands
-(`/gtd-init`, `/gtd-capture`, `/gtd-clarify`, `/gtd-organize`, `/gtd-engage`, `/gtd-review`) are added.
+The bundled `gtd-harness` skill auto-activates on GTD phrasing, and the `/gtd` router plus `/gtd-*` commands
+(`/gtd`, `/gtd-init`, `/gtd-capture`, `/gtd-clarify`, `/gtd-organize`, `/gtd-engage`, `/gtd-review`) are added.
 State is written to your **current workspace**'s `memory/gtd/` — never bundled with the plugin
 (`${CLAUDE_PLUGIN_ROOT}` holds the read-only skill; your lists live in your project). Run `/gtd-init`
 (or just ask) in the workspace where you want your GTD lists to live.

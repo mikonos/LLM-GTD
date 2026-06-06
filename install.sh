@@ -7,8 +7,8 @@
 #
 # 装什么：
 #   1. skill 包          → <VAULT>/.cursor/skills/gtd-harness/
-#   2. Claude Code 命令  → <VAULT>/.claude/commands/gtd*.md      （/gtd-* slash 命令）
-#   3. Codex slash 命令  → ${CODEX_HOME:-~/.codex}/prompts/gtd*.md（全局，Codex 限制）
+#   2. Claude Code 命令  → <VAULT>/.claude/commands/gtd*.md      （/gtd + /gtd-* slash 命令）
+#   3. Codex slash 命令  → ${CODEX_HOME:-~/.codex}/prompts/gtd*.md（全局，含 /gtd）
 #   4. Codex agent       → <VAULT>/.codex/agents/gtd-orchestrator.toml
 #   5. 跑 gtd_init.sh    → 建 <VAULT>/memory/gtd/ 八清单（幂等）
 #   Cursor 关键词触发 + AGENTS.md 自动路由为手动步骤（见末尾提示）。
@@ -38,12 +38,12 @@ mkdir -p "$VAULT/.claude/commands"
 for f in "$REPO"/src/claude-commands/gtd*.md; do
   sed "s|__VAULT__|$VAULT|g" "$f" > "$VAULT/.claude/commands/$(basename "$f")"
 done
-echo "✅ Claude Code 命令 → .claude/commands/（/gtd-* ）"
+echo "✅ Claude Code 命令 → .claude/commands/（/gtd + /gtd-* ）"
 
 # 3. Codex slash 命令（全局；Codex prompts 只支持 CODEX_HOME 级）
 mkdir -p "$CODEX_HOME_DIR/prompts"
 cp "$REPO"/src/codex-prompts/gtd*.md "$CODEX_HOME_DIR/prompts/"
-echo "✅ Codex slash 命令 → $CODEX_HOME_DIR/prompts/（全局 /gtd-* ）"
+echo "✅ Codex slash 命令 → $CODEX_HOME_DIR/prompts/（全局 /gtd + /gtd-* ）"
 
 # 4. Codex agent
 mkdir -p "$VAULT/.codex/agents"
@@ -67,7 +67,7 @@ B) Codex「说人话即触发」：把 snippets/AGENTS.routing.md 的内容追�
    <VAULT>/AGENTS.md（放在工具/命令约定一节，避开任何 mirror 块）。
 
 完成。用法：
-  Claude Code：  /gtd-init  /gtd-capture  /gtd-clarify  /gtd-engage  /gtd-review
-  Codex：        /gtd-*  或说人话；或读取 .cursor/skills/gtd-harness/SKILL.md
+  Claude Code：  /gtd  /gtd-init  /gtd-capture  /gtd-clarify  /gtd-engage  /gtd-review
+  Codex：        /gtd 或 /gtd-*；也可以直接说人话
   全景仪表盘：    bash .cursor/skills/gtd-harness/scripts/gtd_status.sh
 NOTE

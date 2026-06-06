@@ -32,7 +32,7 @@ LLM-GTD 给 agent 一套 harness：
 
 - `memory/gtd/` 里的纯 Markdown 状态
 - 完整 GTD 工作流，而不只是 inbox triage
-- 六个命令：`init`、`capture`、`clarify`、`organize`、`engage`、`review`
+- 一个 `/gtd` 自动路由入口，加六个工作流命令：`init`、`capture`、`clarify`、`organize`、`engage`、`review`
 - Claude Code、Cursor、Codex 共用同一套可信系统
 - 日程信息完整时自动写入 Google Calendar，失败按 fail-closed 报告
 
@@ -107,7 +107,7 @@ Harness
 
 | 平台 | 入口 | 状态 |
 |---|---|---|
-| Claude Code | 插件 `llm-gtd`（skill + `/gtd-*`）；或 `.claude/commands/gtd*.md`（手动） | 同一份 `memory/gtd/` |
+| Claude Code | 插件 `llm-gtd`（skill + `/gtd` + `/gtd-*`）；或 `.claude/commands/gtd*.md`（手动） | 同一份 `memory/gtd/` |
 | Cursor | `.cursor/skills/gtd-harness/` + keyword rules | 同一份 `memory/gtd/` |
 | Codex | Codex 插件 `llm-gtd`；旧版 `~/.codex/prompts/gtd*.md` 仍可用 | 同一份 `memory/gtd/` |
 
@@ -140,8 +140,8 @@ agent 可以替换，状态和工作流留下来。
 /plugin install llm-gtd@llm-gtd
 ```
 
-内置的 `gtd-harness` skill 会在你说 GTD 相关话时自动激活，并加上 `/gtd-*` 命令
-（`/gtd-init`、`/gtd-capture`、`/gtd-clarify`、`/gtd-organize`、`/gtd-engage`、`/gtd-review`）。
+内置的 `gtd-harness` skill 会在你说 GTD 相关话时自动激活，并加上 `/gtd` 自动路由入口和 `/gtd-*` 命令
+（`/gtd`、`/gtd-init`、`/gtd-capture`、`/gtd-clarify`、`/gtd-organize`、`/gtd-engage`、`/gtd-review`）。
 状态只写到你**当前工作区**的 `memory/gtd/`——绝不打包进插件（`${CLAUDE_PLUGIN_ROOT}` 是只读的 skill，
 你的清单在你的项目里）。在你想存放 GTD 清单的工作区里跑 `/gtd-init`（或直接说）即可。
 

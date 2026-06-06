@@ -61,6 +61,28 @@ description: |
 | **现在该做什么** | `engage/SKILL.md` | 按情境/时间/精力/优先级四要素选下一步 |
 | **每周回顾** | `review/SKILL.md` | AI 先生成预回顾包，再做 Get Clear/Current/Creative + Horizons 巡检（★关键成功因子） |
 
+## `/gtd` 斜杠命令自动路由
+
+`/gtd` 是 GTD harness 的默认前门，不是第七套流程。它接收自然语言输入，先识别意图，再读取对应子命令 `SKILL.md` 执行；不要要求用户自己选择子命令。
+
+路由优先级：
+
+| 用户输入特征 | 路由到 | 判定口径 |
+|---|---|---|
+| `init`、搭建、自检、状态、安装、初始化 | `init/SKILL.md` | 系统未搭建时也先走 init |
+| 留空、清空大脑、mind sweep、要记一件事、新承诺、硬日期、session 收尾、一句自然语言任务 | `capture/SKILL.md` | 单条默认 capture→clarify；批量先全捕捉 |
+| 理清收件箱、逐条处理、这些待办怎么归、把 inbox 清掉 | `clarify/SKILL.md` | 已经在 inbox 里的 stuff 才直接 clarify |
+| 清理结构、卡住项目、重复项、情境归位、monthly someday、product ideas 卫生 | `organize/SKILL.md` | 机械卫生自动处理，只浮出判断项 |
+| 现在做什么、今天做什么、这会儿、有 30 分钟、按精力/情境筛 | `engage/SKILL.md` | 先 organize，再按四要素选下一步 |
+| 每周回顾、周复盘、review、系统乱了、不信任清单 | `review/SKILL.md` | Weekly Review 是关键成功因子 |
+
+冲突处理：
+- 用户显式写了子命令意图时尊重显式意图。
+- 句子本身是新输入/新承诺时，优先 `capture→clarify`，不要先讲 GTD 理论。
+- `/gtd 帮我清空大脑` 或 `/gtd` 留空时，进入 capture 的 mind-sweep 流程，先请用户逐行倾倒。
+- 纯知识/想法且无承诺时，通过 clarify 闸口移交 ZK 管线，不写入 GTD action 清单。
+- 只有「行动 vs 知识」或「期望成果」无法判断时，问一句短问题；不要让用户选择具体子命令。
+
 **典型链路**：捕捉随时跑（单条 AI 自动接着 clarify 归位、一行回报，可一句话改；批量则先全捕捉再批量理清）→ engage 看「现在做什么」（前置自动 organize 擦干净结构）→ 每周 review 兜底全局。**AI 自动化程度**：capture→clarify 自动、organize 自动（机械类）；engage 给候选；review 先由 AI 生成预回顾包、清理机械卫生、起草候选，最后只让用户确认少数承诺判断。
 
 ---

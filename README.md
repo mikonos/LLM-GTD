@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) | English
 
-**A portable GTD harness for LLM agents.**
+**A portable GTD skill for LLM agents.**
 
 Not a todo app. Not another productivity prompt. LLM-GTD is a trusted external system that lets
 Claude Code, Cursor, and Codex help you capture, clarify, organize, choose, and review your work
@@ -32,7 +32,7 @@ days** — you supply judgment and report reality; it does the bookkeeping.
 Most AI productivity workflows fail for the same reason most human GTD systems fail: the inbox fills,
 the next action is vague, the project has no current move, and the weekly review gets skipped.
 
-LLM-GTD gives the agent a harness:
+LLM-GTD gives the agent a skill-backed trusted system:
 
 - plain Markdown state in `memory/gtd/`
 - a full GTD workflow, not just inbox triage
@@ -55,11 +55,11 @@ Public agent skills around GTD tend to fall into two buckets:
 Those are useful, but they often miss the hardest part: a durable trusted system that an agent can
 maintain every day without scattering state across tools, chats, and half-written notes.
 
-LLM-GTD is narrower and deeper. It turns GTD into a reusable agent harness:
+LLM-GTD is narrower and deeper. It turns GTD into a reusable agent skill:
 
 ```
 LLM = judgment, language, drafting
-Harness = state, workflow, cadence, adapter, safety boundary
+Skill = state, workflow, cadence, adapter, safety boundary
 ```
 
 David Allen gave us the operating system for commitments. LLM-GTD makes that operating system
@@ -104,7 +104,7 @@ LLM-GTD has four layers:
 LLM
   does judgment, interpretation, next-action drafting
 
-Harness
+Skill package
   State      memory/gtd/*.md
   Logic      src/skill/SKILL.md + sub-skills
   Adapter    Claude Code commands, Cursor skill rules, Codex prompts
@@ -124,7 +124,7 @@ The same skill package and the same `memory/gtd/` state can be used from multipl
 **It is a complete GTD loop, not an inbox prompt.**
 Capture, clarify, organize, engage, and review are all first-class.
 
-**It treats GTD as a harness, not a chatbot personality.**
+**It packages GTD as a skill, not a chatbot personality.**
 The agent can be replaced. The state and workflow remain.
 
 **It keeps knowledge and action separate.**
@@ -150,7 +150,7 @@ This repo is also a Claude Code plugin marketplace. From Claude Code:
 /plugin install llm-gtd@llm-gtd
 ```
 
-The bundled `gtd-harness` skill auto-activates on GTD phrasing, and the `/gtd` router plus `/gtd-*` commands
+The bundled GTD skill auto-activates on GTD phrasing, and the `/gtd` router plus `/gtd-*` commands
 (`/gtd`, `/gtd-init`, `/gtd-capture`, `/gtd-clarify`, `/gtd-organize`, `/gtd-engage`, `/gtd-review`) are added.
 State is written to your **current workspace**'s `memory/gtd/` — never bundled with the plugin
 (`${CLAUDE_PLUGIN_ROOT}` holds the read-only skill; your lists live in your project). Run `/gtd-init`
@@ -281,7 +281,7 @@ If the agent cannot safely infer your commitment, it asks instead of pretending.
 ## Repository Layout
 
 ```text
-src/skill/            core gtd-harness skill package
+src/skill/            core GTD skill package
 plugins/llm-gtd/      Codex plugin package generated from src/skill/
 .agents/plugins/      repo-scoped Codex marketplace
 scripts/              repository maintenance scripts
@@ -314,7 +314,7 @@ LLM-GTD was shaped by looking at existing public agent-skill patterns:
 - [openai/skills](https://github.com/openai/skills) shows the current Codex skill packaging pattern.
 
 LLM-GTD is deliberately smaller than a Life OS and more complete than a single inbox skill. It is the
-GTD commitment loop, packaged as a portable harness.
+GTD commitment loop, packaged as a portable skill.
 
 ## Language
 

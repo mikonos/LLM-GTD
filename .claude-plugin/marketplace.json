@@ -8,7 +8,7 @@
     {
       "name": "llm-gtd",
       "source": "./plugins/llm-gtd",
-      "description": "A portable GTD trusted system for Claude Code: capture / clarify / organize / engage / review over plain-Markdown lists in memory/gtd/. The bundled gtd-harness skill auto-activates; /gtd-* commands are included. Calendar writes are confirmation-gated and fail-closed."
+      "description": "A portable GTD skill for Claude Code: capture / clarify / organize / engage / review over plain-Markdown lists in memory/gtd/. The bundled skill auto-activates; /gtd and /gtd-* commands are included. Calendar writes are confirmation-gated and fail-closed."
     }
   ]
 }

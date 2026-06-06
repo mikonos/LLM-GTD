@@ -2,7 +2,7 @@
 
 中文 | [English](README.md)
 
-**给 LLM Agent 用的可移植 GTD harness。**
+**给 LLM Agent 用的可移植 GTD skill。**
 
 它不是 todo app，也不是又一个效率提示词。LLM-GTD 是一套可信外部系统，让 Claude Code、Cursor 和 Codex 可以帮你收集、理清、组织、选择和回顾任务，同时不把你的生活变成一堆半处理的待办。
 
@@ -28,7 +28,7 @@
 
 大多数 AI 效率工作流失败，原因和人类 GTD 系统失败一样：收件箱越来越满，下一步行动太模糊，项目没有当前推进动作，每周回顾被跳过。
 
-LLM-GTD 给 agent 一套 harness：
+LLM-GTD 给 agent 一套 skill 化的可信系统：
 
 - `memory/gtd/` 里的纯 Markdown 状态
 - 完整 GTD 工作流，而不只是 inbox triage
@@ -49,11 +49,11 @@ LLM-GTD 给 agent 一套 harness：
 
 这些都 useful，但经常漏掉最难的部分：一套 agent 每天都能维护的、不会把状态散落到工具、聊天和半成品笔记里的可信系统。
 
-LLM-GTD 更窄，也更深。它把 GTD 做成可复用的 agent harness：
+LLM-GTD 更窄，也更深。它把 GTD 做成可复用的 agent skill：
 
 ```text
 LLM = 判断、语言、起草
-Harness = 状态、工作流、节律、适配层、安全边界
+Skill = 状态、工作流、节律、适配层、安全边界
 ```
 
 David Allen 给了我们管理承诺的操作系统。LLM-GTD 把这套操作系统改造成 agent-native 的形态。
@@ -96,7 +96,7 @@ LLM-GTD 有四层：
 LLM
   负责判断、解释、起草下一步行动
 
-Harness
+Skill package
   State      memory/gtd/*.md
   Logic      src/skill/SKILL.md + sub-skills
   Adapter    Claude Code commands、Cursor skill rules、Codex prompts
@@ -116,7 +116,7 @@ Harness
 **它是完整 GTD 闭环，不是 inbox prompt。**
 Capture、Clarify、Organize、Engage、Review 都是一等公民。
 
-**它把 GTD 当 harness，而不是 chatbot persona。**
+**它把 GTD 封装成 skill，而不是 chatbot persona。**
 agent 可以替换，状态和工作流留下来。
 
 **它把知识和行动分开。**
@@ -140,7 +140,7 @@ agent 可以替换，状态和工作流留下来。
 /plugin install llm-gtd@llm-gtd
 ```
 
-内置的 `gtd-harness` skill 会在你说 GTD 相关话时自动激活，并加上 `/gtd` 自动路由入口和 `/gtd-*` 命令
+内置的 GTD skill 会在你说 GTD 相关话时自动激活，并加上 `/gtd` 自动路由入口和 `/gtd-*` 命令
 （`/gtd`、`/gtd-init`、`/gtd-capture`、`/gtd-clarify`、`/gtd-organize`、`/gtd-engage`、`/gtd-review`）。
 状态只写到你**当前工作区**的 `memory/gtd/`——绝不打包进插件（`${CLAUDE_PLUGIN_ROOT}` 是只读的 skill，
 你的清单在你的项目里）。在你想存放 GTD 清单的工作区里跑 `/gtd-init`（或直接说）即可。
@@ -267,7 +267,7 @@ LLM-GTD 会先捕捉所有内容，再理清可以安全推断的部分：
 ## 仓库结构
 
 ```text
-src/skill/            gtd-harness 核心 skill 包
+src/skill/            GTD 核心 skill 包
 plugins/llm-gtd/      由 src/skill/ 生成的 Codex 插件包
 .agents/plugins/      repo 级 Codex marketplace
 scripts/              仓库维护脚本
@@ -299,7 +299,7 @@ LLM-GTD 参考过一些公开 agent-skill 模式：
 - [huytieu/COG-second-brain](https://github.com/huytieu/COG-second-brain) 是更大的 agentic second-brain 系统，包含 capture 和 weekly check-in workflow。
 - [openai/skills](https://github.com/openai/skills) 展示了当前 Codex skill packaging 模式。
 
-LLM-GTD 故意比 Life OS 小，又比单个 inbox skill 完整。它只做一件事：把 GTD commitment loop 封装成可移植 harness。
+LLM-GTD 故意比 Life OS 小，又比单个 inbox skill 完整。它只做一件事：把 GTD commitment loop 封装成可移植 skill。
 
 ## 语言
 

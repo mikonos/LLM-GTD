@@ -1,12 +1,15 @@
 ## [项目名]
 
 - 期望成果：一句话描述「完成长什么样」（可视化的结果，不是过程）
-- 下一步行动：→ 见 next-actions（@情境）   *(必须有，否则是 stalled)*
+- 下一步行动：
+  - [[next-actions#^na-short-id-YYYYMMDD|具体下一步行动]]（@情境）
+  - [[waiting-for#^wf-short-id-YYYYMMDD|等待某人交付什么]]（等待，可选）
 - 服务于：[20k 责任领域 / 30k 目标]（Horizons 校准，可选）
 - 支持材料：[[reference#条目名|条目名]] / [[项目文档]]
 - 来源：[[笔记]] · 立项日期：YYYYMMDD
 
 <!--
+下一步行动至少 1 条，否则是 stalled；可以多条，但只放当前可并行推进的物理动作，不放完整任务树。
 闭环规则：期望成果达成后，删除整个项目块；不要保留「下一步行动：无」。
 
 复杂项目可用自然计划模型展开（见 references/natural-planning-model.md）：

@@ -42,21 +42,39 @@ count_projects() {
   cnt '^## ' "$f"
 }
 
-# stalled projects：无有效「下一步行动」的项目；「下一步行动：无」按残留处理
+# stalled projects：无有效「下一步行动」block link 的项目；「下一步行动：无」按残留处理
 count_stalled() {
   local f="$GTD_DIR/projects.md"
   [ -f "$f" ] || { echo 0; return; }
   awk '
+    function has_action_link(line) {
+      return line ~ /\[\[(next-actions|waiting-for)#\^/
+    }
+    function invalid_next_heading(line) {
+      return line ~ /下一步行动：([[:space:]]*)?(无|没有|无需|不需要|已完成|安排已确认|none|None|N\/A)/
+    }
     /^## / {
       if (in_project && !has_valid_next) stalled++
       in_project=1
       has_valid_next=0
+      in_next_section=0
       next
     }
     in_project && /^- 下一步行动：/ {
-      if ($0 !~ /下一步行动：([[:space:]]*)?(无|没有|无需|不需要|已完成|安排已确认|none|None|N\/A)/) {
+      in_next_section=1
+      if (has_action_link($0)) {
         has_valid_next=1
       }
+      if (invalid_next_heading($0)) {
+        in_next_section=0
+      }
+      next
+    }
+    in_project && in_next_section && /^- / {
+      in_next_section=0
+    }
+    in_project && in_next_section && has_action_link($0) {
+      has_valid_next=1
     }
     END {
       if (in_project && !has_valid_next) stalled++

@@ -28,7 +28,7 @@ description: |
 |---|---|---|
 | `inbox.md` | Inbox | 捕捉唯一落点，零评判 |
 | `next-actions.md` | Next Actions | 已理清的单步动作，**按情境分组**（@电脑/@电话/@外出/@家/@议程-人） |
-| `projects.md` | Projects | >1 步的成果，每条挂下一步行动 |
+| `projects.md` | Projects | >1 步的成果，每条挂至少一个当前下一步；可并行动作可挂多个 |
 | `waiting-for.md` | Waiting For | 委派/等待，挂人名+约定 |
 | `someday-maybe.md` | Someday/Maybe | 暂不承诺、不愿遗忘（月度扫） |
 | `calendar.md` | Calendar（hard landscape） | 真实 **GCal** 为唯一真源（可达时）；本文件仅 GCal 不可达时兜底，**不抄双份**。读+自动写见 `references/capability-map.md` |
@@ -109,6 +109,7 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 - 用户没说清是行动还是知识 → 按 clarify「需要行动吗」判定，模糊则反问一句。
 - 写入清单用 intent 语言落盘（追加到对应清单/分组末尾），不新建分区、不覆盖既有条目。
 - Obsidian 链接规则：指向 `memory/gtd/` 里某个文件内标题时，用 `[[文件名#标题|标题]]`，例如 `[[projects#项目名|项目名]]`；不要把同文件内标题写成裸 `[[标题]]`，否则会被误识别成独立文件。
+- Project 可挂多个当前 next action，但只挂**真正可并行**、互不等待的物理动作；有先后依赖的任务树放支持材料/自然计划模型里，`projects.md` 只显示当前可推进入口。
 - 闭环：用户宣告完成 → 从清单**删除该行**（不打勾留痕，沿用仓库 open loops 约定）。
 - 项目闭环：当 `projects.md` 里的期望成果已经达成，且没有仍需推动的下一步 → **删除整个项目块**。不要把已完成项目留作记录，也不要写「下一步行动：无」。
 
@@ -138,3 +139,4 @@ clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进
 - v1.8（2026-06-02）：`gtd_init.sh` 内置 Codex slash 命令安装/刷新；单独跑 init 也能补齐 `/gtd*`。
 - v1.9（2026-06-02）：新增 Codex plugin 打包路径；脚本支持 `LLM_GTD_ROOT`、旧 `.cursor` 安装和插件模式下的当前 workspace 状态根。
 - v1.10（2026-06-03）：日程信息完整时自动写入 GCal，不再逐次确认；信息缺关键字段或 GCal 不可达时才降级。
+- v1.11（2026-06-08）：项目块支持挂多个当前 next action block links；仅限可并行动作，stalled 检查改为识别 `next-actions` / `waiting-for` block link，不再把空标题或泛泛指针当有效下一步。

@@ -2,6 +2,12 @@
 
 All notable changes. See `src/skill/references/evolution-log.md` for the in-skill log.
 
+## v1.11 — Multiple current next actions per project
+Projects can now list multiple current next-action / waiting-for block links
+when the actions can proceed in parallel. Stalled-project detection now requires
+a concrete `next-actions` or `waiting-for` block link, so empty headings and
+generic "see next-actions" pointers no longer count as coverage.
+
 ## v1.10 — GCal auto-write
 Complete schedule items now write directly to Google Calendar without per-event
 confirmation. Missing date/time/title fields are clarified first; unavailable or

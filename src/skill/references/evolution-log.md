@@ -66,6 +66,11 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 - **缺字段**：缺日期、开始时间、事项标题/对象等关键字段时，只问缺失字段；会议缺时长时默认 60 分钟。
 - **失败降级**：GCal 不可达或 tool 失败 → 如实报告，并把时间事记入 `calendar.md` 兜底，继续遵守“不维护双日历”。
 
+## v1.11 — Projects 支持多个当前 next action
+- **格式升级**：`projects.md` 的 `下一步行动` 可写成多行 block links，指向 `next-actions.md` 或 `waiting-for.md`。
+- **边界保留**：只挂当前可并行推进的物理动作；有先后依赖的任务树仍放支持材料/自然计划模型，不把 `projects.md` 变成项目管理软件。
+- **防回归**：`gtd_status.sh` 与 `gtd_review_prep.sh` 的 stalled 检查改为识别有效 block link；空标题、「下一步行动：无」或泛泛 `见 next-actions` 不再算有效下一步。
+
 ---
 
 **AI 自动化总览**：capture→clarify 自动、organize（机械）自动；review 先预处理；engage 给候选，用户保留承诺、选择与反思。

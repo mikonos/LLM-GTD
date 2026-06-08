@@ -16,7 +16,7 @@
 - [ ] `next-actions.md`：完成的销项；不再相关的删；每条仍是有效下一步？
 - [ ] `calendar.md`：回看上周（有无遗留收尾）+ 前看本周（硬约定准备好了吗）
 - [ ] `waiting-for.md`：逐条看委派日期，哪些该催了？
-- [ ] `projects.md`：先删掉成果已达成的项目；剩余项目确认挂着有效下一步（stalled 当场补）；成果是否仍想要？
+- [ ] `projects.md`：先删掉成果已达成的项目；剩余项目确认挂着至少一个有效下一步 block link；多条只保留可并行动作（stalled 当场补）；成果是否仍想要？
 
 ## ③ Get Creative（创造）
 - [ ] `someday-maybe.md`：有哪条成熟了，拉进 active？过时的删

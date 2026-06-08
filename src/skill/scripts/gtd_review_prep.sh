@@ -35,18 +35,36 @@ stalled_projects() {
   f="$(file projects.md)"
   [ -f "$f" ] || return 0
   awk '
+    function has_action_link(line) {
+      return line ~ /\[\[(next-actions|waiting-for)#\^/
+    }
+    function invalid_next_heading(line) {
+      return line ~ /下一步行动：([[:space:]]*)?(无|没有|无需|不需要|已完成|安排已确认|none|None|N\/A)/
+    }
     /^## / {
       if (in_project && !has_valid_next) print project
       in_project=1
       has_valid_next=0
+      in_next_section=0
       project=$0
       sub(/^## /, "", project)
       next
     }
     in_project && /^- 下一步行动：/ {
-      if ($0 !~ /下一步行动：([[:space:]]*)?(无|没有|无需|不需要|已完成|安排已确认|none|None|N\/A)/) {
+      in_next_section=1
+      if (has_action_link($0)) {
         has_valid_next=1
       }
+      if (invalid_next_heading($0)) {
+        in_next_section=0
+      }
+      next
+    }
+    in_project && in_next_section && /^- / {
+      in_next_section=0
+    }
+    in_project && in_next_section && has_action_link($0) {
+      has_valid_next=1
     }
     END {
       if (in_project && !has_valid_next) print project
@@ -119,7 +137,7 @@ fi
 
 section "确认队列"
 echo "- 清空 inbox：逐项 clarify 到零。"
-echo "- stalled projects：为每个项目补一个具体下一步，或确认砍掉。"
+echo "- stalled projects：为每个项目补至少一个具体下一步；必要时挂多个可并行动作，或确认砍掉。"
 echo "- waiting-for：确认哪些要催，AI 可先起草中性话术。"
 echo "- someday/maybe：确认是否启动、删除或继续孵化。"
 echo "- 下周 3 件事：由 AI 给候选，用户最后确认。"

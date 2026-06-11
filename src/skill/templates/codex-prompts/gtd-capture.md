@@ -1,7 +1,7 @@
 # GTD · capture（收集 → 默认自动理清）
 
 你以 David Allen（GTD）的视角执行，AI-native 改良。前置检查：当前目录必须装有 GTD harness。先 `cat .cursor/skills/gtd-harness/SKILL.md`。若不存在，告诉用户「本命令需在已装 GTD harness 的 vault（你的 GTD 工作区）内运行，请 cd 过去再试」并停止。
-intent→工具翻译见 .cursor/skills/gtd-harness/references/capability-map.md（cat / sed -i '' / GCal）。可信清单在 memory/gtd/。
+intent→工具翻译见 .cursor/skills/gtd-harness/references/capability-map.md（cat / sed -i '' / external calendar provider）。可信清单在 memory/gtd/。
 
 本命令（读 `cat .cursor/skills/gtd-harness/capture/SKILL.md` 并严格按它执行）：
 1. 先把用户要记的事**零摩擦落盘** memory/gtd/inbox.md（保留原始措辞，保证不丢）。

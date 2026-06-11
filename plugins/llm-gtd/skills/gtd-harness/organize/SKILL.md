@@ -1,65 +1,55 @@
 ---
 name: gtd-organize
-description: GTD harness 场景命令 · 组织（结构卫生）。AI 自动跑机械记账（孤儿/stalled/情境/死勾），只把需你拍板的浮上来。在 engage/review 前自动先扫。GTD 第三步。
+description: GTD skill 场景命令 · 组织（结构卫生）。AI 自动跑机械记账（孤儿/stalled/约束镜头/死勾），只把需用户拍板的浮上来。在 engage/review 前自动先扫。GTD 第三步。
 parent: gtd-harness
 ---
 
 
-# GTD · organize（结构卫生 · AI 自动）
+# GTD · organize（结构卫生）
 
-**视角**：David Allen，AI-native。clarify 已做**每条的即时落位**；organize 不是再分一遍类，而是**结构层卫生**——清理随时间漂移的东西。**这是五步里最该 AI 全自动的一步**：大部分是纯机械记账（人做嫌烦、AI 做零判断损失），只有少数真需要你拍板。
+**视角**：David Allen，AI-native。clarify 已做每条即时落位；organize 只修复结构漂移，不重新发明分类。
 
-## 自动 vs 需你拍板（核心分流）
+## 何时跑
 
-| 类别 | AI 静默自动做 | 仅这些浮上来问你 |
+- engage 之前自动先扫，避免 stalled 项目漏出。
+- review 的 Get Current 阶段自动跑。
+- 外部 calendar provider 从不可达恢复为可达后，对账 `calendar.md` 兜底项。
+- 月度 someday / product ideas 重估。
+- 用户单独要求 `/gtd-organize`、清理结构、卡住项目、重复项、情境/约束归位。
+
+## 加载与边界
+
+- 先读 `references/list-definitions.md`：清单边界、动作权限、Obsidian 链接规则以它为唯一真源。
+- 涉及外部日历读写时，再读 `references/capability-map.md`。
+- 自动化边界：机械卫生可自动；承诺判断、高后果外部动作、发消息、approval 操作不能自动。
+
+## 自动 vs 需确认
+
+| 类别 | 可自动做 | 需用户确认 |
 |---|---|---|
-| **孤儿** | next-action 指向不存在的项目、项目无有效下一步 block link → 检出 | — |
-| **完成/卡住项目** | 先判定成果是否已达成：已达成 → 删除整个项目块；未达成但无有效下一步 → **AI 起草一个下一步**（act-then-surface） | 起草不出来的 / 该砍不该砍 → 问一句 |
-| **情境卫生** | 错情境的条目归位、@议程 按人聚组、情境过载拆细 | — |
-| **死勾/重复** | 清理已完成残留、去重 | — |
-| **someday 重估**（月度） | 标出「看起来熟了」的候选 | 该不该启动（承诺判断）→ 问 |
+| 孤儿 | 检出 next-action / project 失链；能唯一匹配时补 block link | 多个可能归属或结果不明 |
+| 完成项目 | 成果明确达成且无仍需推动的下一步 → 删除项目块 | 成果是否达成不确定、项目该不该砍 |
+| stalled 项目 | 起草一个具体下一步并挂回 project | 起草不出、需要改变承诺 |
+| 约束/镜头卫生 | 补明显缺失的预计时长 / 精力档 / 真实约束；旧 @ 分组转为兼容信号 | 需要用户判断场景或优先级 |
+| 死勾/重复 | 清理已完成残留、明显重复项 | 疑似重复但语义不同 |
+| calendar 兜底 | 已确认进入外部日历的兜底项可删除；普通待办移回 next-actions | 外部日历不可达、过期但状态不明、冲突/疑似重复 |
+| someday / product ideas | 标出成熟候选；为缺可见性的 product idea 起草下一步 | 是否启动 / 删除 / 降级 |
 
-机械类直接做完，给**一行汇总**「整理了 X：清掉 C 个完成项目、补了 N 个 stalled 下一步、归位 M 条情境、清 K 条重复」；判断类**批量问一次**，不逐条打断。
+## 工作流
 
-## 何时跑（默认自动）
-- **engage 之前自动先扫**（看「现在做什么」前先擦干净结构，stalled 项目不会漏）。
-- **review 的 Get Current 阶段自动跑**（项目-行动挂钩校验本就是回顾一环）。
-- 月度 someday 重估（review 时或单独触发）。
-- 单独 `/gtd-organize` 按需全扫。
-- 导入的「待重新归情境」段批量归位。
-
-## 八清单各自的「该放什么 / 不该放什么」
-
-| 清单 | 该放 | 不该放 |
-|---|---|---|
-| next-actions | 单步、可立即执行、带情境 | 多步成果（→ projects）、特定时间事（→ calendar） |
-| projects | >1 步的未完成成果 + 一个或多个当前下一步 block links | 单步动作、模糊愿望（→ someday）、完整任务树、已完成成果 |
-| waiting-for | 委派出去/在等的，含人名+约定 | 自己的行动（→ next-actions） |
-| calendar | **仅**特定日/时才有意义的 | 普通待办（→ next-actions）——日历神圣 |
-| someday-maybe | 暂不承诺、孵化中 | 已承诺要做的（→ projects/next-actions） |
-| reference | 无需行动、备查、项目支持材料 | 知识/洞察笔记（→ ZK 管线） |
-
-## 工作流（机械类自动做，判断类批量问）
-
-1. **扫一遍全部清单**，机械类**直接修**：孤儿挂回/标注、错情境归位、@议程按人聚组、情境过载拆细、清死勾去重。
-2. **完成/卡住项目**：逐个 project 先问「期望成果是否已经达成？」已达成则**直接删除项目块**（不归档、不写「下一步行动：无」）；未达成但无有效 next-actions / waiting-for block link，AI **起草一个具体下一步**写入 next-actions + 项目挂钩（act-then-surface，可一句话改）；已有多条当前下一步时，只保留可并行动作，依赖链条移到支持材料；实在起草不出的，收集起来批量问。
-3. **someday 重估（月度）**：标出「看起来熟了」的候选，批量问「这几条要不要启动?」——**不替你做承诺判断**。
-4. **一行汇总 + 批量提问**：报告自动改了什么；把「需拍板」的（补不出下一步的 stalled / 该砍 / someday 启动）一次性列给你。
-5. 所有移动：追加到目标分组末尾，从原位删除，不覆盖其他条目。
-
-## 八清单「该放 / 不该放」（归位判据）
-
-| 清单 | 该放 | 不该放 |
-|---|---|---|
-| next-actions | 单步、可立即执行、带情境 | 多步成果（→ projects）、特定时间事（→ calendar/GCal） |
-| projects | >1 步的成果 + 一个或多个当前下一步 block links | 单步动作、模糊愿望（→ someday）、完整任务树 |
-| waiting-for | 委派出去/在等的，含人名+约定 | 自己的行动（→ next-actions） |
-| calendar | **仅**特定日/时才有意义的（真实 GCal 为准） | 普通待办（→ next-actions）——日历神圣 |
-| someday-maybe | 暂不承诺、孵化中 | 已承诺要做的（→ projects/next-actions） |
-| reference | 无需行动、备查、项目支持材料 | 知识/洞察笔记（→ ZK 管线） |
+1. 扫描 `memory/gtd/` 核心清单和 `product-ideas.md`。
+2. 按 `list-definitions.md` 判断每条是否在正确清单；机械错位直接移动，判断不明的收集起来。
+3. 对 projects 做三问：成果是否已达成？是否有有效 next-actions / waiting-for block link？多条下一步是否真正可并行？
+4. 对 next-actions 补轻字段：预计时长 / 精力档 / 真实约束；旧 `@电脑/@电话` 仅保留为工具约束信号。
+5. 对 `calendar.md` 兜底项按外部 calendar provider 可达性对账；成功外部化后删除本地副本，失败则保留并浮上来。
+6. 对 someday / product ideas 做月度重估；product ideas 缺 project / next-action 可见性时起草候选。
+7. 输出一行自动处理汇总 + 一组需确认问题；不要逐条打断。
 
 ## 质量检查
-- [ ] 机械类（孤儿/情境/死勾/重复）已自动修，给了一行汇总
-- [ ] 已完成 project 已删除；剩余每个 project 都挂着至少一个有效下一步 block link（stalled 已补或已列入待拍板）
-- [ ] 判断类（补不出的 stalled / 该砍 / someday 启动）批量问，未逐条打断、未替用户拍板
-- [ ] calendar 无普通待办；someday 与 active 边界清晰
+
+- [ ] 已先读 `references/list-definitions.md`，没有在本文件复制另一套清单定义
+- [ ] 机械类（孤儿、缺轻字段、死勾、明显重复）已自动修并汇总
+- [ ] 已完成 project 已删除；未完成 project 有有效 next-action / waiting-for block link，或已列入待确认
+- [ ] `calendar.md` 已对账：已同步项移出、普通待办归位、未确认硬日程保留并浮上来
+- [ ] 判断类批量问，未替用户做承诺判断
+- [ ] 未执行发消息、自动 approval、未确认外部写入等高后果动作

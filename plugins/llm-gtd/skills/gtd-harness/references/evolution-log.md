@@ -2,24 +2,24 @@
 
 ## v1.0 — 首版
 David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
-- **状态层**：`memory/gtd/` 八清单（GTD-native，next-actions 按情境分组）
-- **逻辑层**：六命令 SKILL.md（平台中立，无工具名）
+- **状态层**：`memory/gtd/` 八清单（GTD-native，next-actions 行动池 + Engage 镜头筛选）
+- **逻辑层**：七命令 SKILL.md（平台中立，无工具名）
 - **适配层**：三平台薄入口 + `capability-map.md`
 - **节律层**：每周回顾命令（cron 可选，不默认开）
 
 设计原则：
 - 按 GTD 第一性原理独立建系统；若工作区已有别的待办系统，本包独立共存，可选 `init --import-legacy` 一次性导入。
-- next-actions 按情境分组（@电脑/@电话/@外出/@家/@议程-人），回归真正的 GTD 模型。
+- next-actions 行动池 + Engage 镜头筛选（@电脑/@电话/@外出/@家/@议程-人），回归真正的 GTD 模型。
 - `init` 作为首次运行/重装入口（幂等自检）——harness 必须能自我初始化。
 - **Allen × Luhmann 接缝**：捕捉共享、clarify 分流。行动进 GTD，知识进笔记系统。不重造捕捉。
 
-## v1.1 — 日历复用（GCal 读+确认写）
-- **单一日历**：真实 Google Calendar 可达时为唯一 hard landscape，`calendar.md` 退为不可达兜底，不抄副本（Allen 双日历铁律）。
-- **读**：engage 读今天硬约定、review 读本周 hard landscape，先 GCal、不可达降级。
+## v1.1 — 日历复用（external calendar provider 读+确认写）
+- **单一日历**：外部 calendar provider 可达时为唯一 hard landscape，`calendar.md` 退为不可达兜底，不抄副本（Allen 双日历铁律）。
+- **读**：engage 读今天硬约定、review 读本周 hard landscape，先 external calendar provider、不可达降级。
 - **写（旧策略）**：v1.1 曾采用确认门；当前写入规则已由 v1.10 改为完整日程自动写入。
 
 ## v1.2 — Codex slash 命令 + 三平台触发齐活
-- Codex `~/.codex/prompts/gtd*.md`（7 条），vault 感知 fail-soft（Codex prompts 仅全局，无项目级）。
+- Codex `~/.codex/prompts/gtd*.md`（8 条），vault 感知 fail-soft（Codex prompts 仅全局，无项目级）。
 - AGENTS.md 自动路由，Codex「说人话即触发」。
 - 三平台触发：cc `/gtd-*`（项目级命令）· Cursor 关键词（skill-rules）· Codex `/gtd-*` + AGENTS 路由 + orchestrator agent。同一真源、同一 `memory/gtd/`。
 
@@ -59,23 +59,29 @@ David Allen GTD × Karpathy「Agent = LLM + harness」。四层 harness：
 ## v1.9 — Codex plugin package
 - 新增公开 Codex plugin 打包路径：repo marketplace 指向 `plugins/llm-gtd/`，插件 skill 由 `src/skill/` 同步生成。
 - 脚本状态根解析改为三段：`LLM_GTD_ROOT` 明确指定 → 旧 `.cursor/skills/gtd-harness/` 安装自动定位 vault → 否则使用当前工作区，适配 Codex 插件模式。
-- 插件包只包含 skill 逻辑，不包含用户 `memory/gtd/` 状态；Google Calendar 仍是可选外部能力，不内置 app/MCP。
+- 插件包只包含 skill 逻辑，不包含用户 `memory/gtd/` 状态；external calendar provider 仍是可选外部能力，不内置 app/MCP。
 
-## v1.10 — GCal 自动写入
-- **写**：clarify 出特定时间事且日程信息完整 → 直接写 GCal，不再逐次确认。
+## v1.10 — external calendar provider 自动写入
+- **写**：clarify 出特定时间事且日程信息完整 → 直接写 external calendar provider，不再逐次确认。
 - **缺字段**：缺日期、开始时间、事项标题/对象等关键字段时，只问缺失字段；会议缺时长时默认 60 分钟。
-- **失败降级**：GCal 不可达或 tool 失败 → 如实报告，并把时间事记入 `calendar.md` 兜底，继续遵守“不维护双日历”。
+- **失败降级**：external calendar provider 不可达或 tool 失败 → 如实报告，并把时间事记入 `calendar.md` 兜底，继续遵守“不维护双日历”。
 
 ## v1.11 — Projects 支持多个当前 next action
 - **格式升级**：`projects.md` 的 `下一步行动` 可写成多行 block links，指向 `next-actions.md` 或 `waiting-for.md`。
 - **边界保留**：只挂当前可并行推进的物理动作；有先后依赖的任务树仍放支持材料/自然计划模型，不把 `projects.md` 变成项目管理软件。
 - **防回归**：`gtd_status.sh` 与 `gtd_review_prep.sh` 的 stalled 检查改为识别有效 block link；空标题、「下一步行动：无」或泛泛 `见 next-actions` 不再算有效下一步。
 
+## v1.12 — update 场景命令
+- **新增命令**：`gtd-update` 处理用户汇报的现实变化：已完成行动、项目进展、waiting-for 回应、日程细节变化、取消或纠错。
+- **路由修正**：`/gtd` 遇到「做完了 / 已确认 / 对方回了 / 日程改了 / 取消」类措辞时优先走 update，不把已发生事实重新 capture 成 inbox。
+- **项目推进**：已完成 next-action 从清单删除；若项目仍未完成，则基于新事实起草新的当前 next-action；若成果已达成，则删除项目块。
+- **边界**：新输入仍走 capture；结构漂移仍走 organize；高风险项目删除、多匹配或日历事件不唯一时只问一句。
+
 ---
 
-**AI 自动化总览**：capture→clarify 自动、organize（机械）自动；review 先预处理；engage 给候选，用户保留承诺、选择与反思。
+**AI 自动化总览**：capture→clarify 自动、明确 update 自动、organize（机械）自动；review 先预处理；engage 给候选，用户保留承诺、选择与反思。
 
 ## 待办 / v2 候选
-- `calendar.md` 接 Apple Reminders + 双向对账。
+- `calendar.md` 接 reminder provider + 双向对账。
 - review 自动节律：cron / 定时提醒（默认不开，需用户同意）。
 - engage 挂接每日例程。

@@ -23,5 +23,5 @@ $ARGUMENTS
 </context>
 
 <process>
-按 clarify/SKILL.md 执行决策树，对 inbox 每项判定「需要行动吗 / 下一步具体动作是什么」，落到对应清单（next-actions 带情境标签、>1 步立 project、知识类移交 ZK 管线），落位后从 inbox 删除。识别 2 分钟法则并提示。信息不足时反问一句，不瞎编。
+按 clarify/SKILL.md 执行决策树，对 inbox 每项判定「需要行动吗 / 下一步具体动作是什么」，落到对应清单（next-actions 带轻字段标签、>1 步立 project、知识类移交 ZK 管线），落位后从 inbox 删除。识别 2 分钟法则并提示。信息不足时反问一句，不瞎编。
 </process>

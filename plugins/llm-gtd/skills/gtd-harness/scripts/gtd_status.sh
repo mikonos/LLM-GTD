@@ -99,6 +99,7 @@ printf "  🎯 Projects           : %s（其中 stalled≈ %s）\n" "$(count_pro
 printf "  ⏳ Waiting For        : %s\n" "$(count_open waiting-for.md)"
 printf "  📅 Calendar 硬地形    : %s\n" "$(count_calendar)"
 printf "  💭 Someday/Maybe      : %s\n" "$(count_open someday-maybe.md)"
+printf "  💡 Product Ideas      : %s\n" "$(count_open product-ideas.md)"
 echo "────────────────────────────────────"
 
 # 提醒信号

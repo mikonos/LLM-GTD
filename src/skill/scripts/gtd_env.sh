@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Shared environment resolver for LLM-GTD scripts.
+# Shared environment resolver for GTD scripts.
 #
 # Workspace root resolution:
 # 1. LLM_GTD_ROOT, when explicitly set.
 # 2. Legacy installed layout: <workspace>/.cursor/skills/gtd-harness/scripts/.
-# 3. Current working directory, for Codex plugin installs.
+# 3. Current working directory, for plugin installs.
 
 GTD_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"
 GTD_SKILL_DIR="$(cd "$GTD_SCRIPT_DIR/.." && pwd)"

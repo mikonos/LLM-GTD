@@ -1,142 +1,76 @@
 ---
 name: gtd-harness
 description: |
-  GTD（David Allen《Getting Things Done》）五步工作流主入口包。把任务/承诺转成「心如止水」的可信外部系统。
-  六场景命令：init（搭建/自检）· capture（收集）· clarify（理清）· organize（组织）· engage（执行）· review（每周回顾）。
-  Use when: GTD、任务管理、收集、理清、下一步行动、每周回顾、weekly review、项目组织、清空大脑、心如止水、horizons of focus、gtd-harness。
+  GTD skill（兼容包名：gtd-harness）主入口。把任务/承诺转成可信外部系统。
+  七场景命令：init（搭建/自检）· capture（收集）· clarify（理清）· update（状态更新）· organize（组织）· engage（执行）· review（每周回顾）。
+  Use when: GTD、任务管理、收集、理清、更新任务状态、完成待办、下一步行动、每周回顾、weekly review、项目组织、清空大脑、session 状态收尾、心如止水、horizons of focus、gtd-harness。
   也触发：「帮我把这些待办理一理」「这周该做什么」「我脑子太乱了帮我清空」「搭一个 GTD 系统」。
   不触发：纯知识/想法消化（走 fleeting-note → ZK 管线）；具体某条 open loop 的临时记录（旧 open-loops skill 仍可用）。
 ---
 
 
-# GTD Harness · 五步主入口
+# GTD Skill · 主入口
 
-> **通用安全**：本包自包含；按各 SKILL.md 工作流执行。破坏性操作（删文件、批量移动）前先确认；日历写入按 `references/capability-map.md` 的自动写入契约执行。
+**身份视角**：以 David Allen 的视角执行。目标不是维护待办清单，而是把承诺放进一个用户信任的外部系统，让大脑不用记忆。
 
+## 状态层
 
-**身份视角**：以 **David Allen** 的视角执行。GTD 的本质不是待办清单，而是**把承诺从大脑搬到一个你完全信任的外部系统**，让大脑回到「mind like water」去思考，而不是去记忆。系统可信，焦虑才消失。
+核心清单在 `memory/gtd/`，纯 markdown，不打包进插件，也不进入知识索引。
 
-**Agent = LLM + harness 定位**：本包是 **harness**——LLM（各平台自带）负责 clarify 的判断（可行动吗？下一步是什么？），harness 负责状态（清单）、工作流（五步）、节律（回顾）、适配（三平台）。
-
----
-
-## 可信系统位置（状态层）
-
-所有清单在 `memory/gtd/`（八个文件，物理分开——Allen 铁律）：
-
-| 文件 | 清单 | 用途一句话 |
-|---|---|---|
-| `inbox.md` | Inbox | 捕捉唯一落点，零评判 |
-| `next-actions.md` | Next Actions | 已理清的单步动作，**按情境分组**（@电脑/@电话/@外出/@家/@议程-人） |
-| `projects.md` | Projects | >1 步的成果，每条挂至少一个当前下一步；可并行动作可挂多个 |
-| `waiting-for.md` | Waiting For | 委派/等待，挂人名+约定 |
-| `someday-maybe.md` | Someday/Maybe | 暂不承诺、不愿遗忘（月度扫） |
-| `calendar.md` | Calendar（hard landscape） | 真实 **GCal** 为唯一真源（可达时）；本文件仅 GCal 不可达时兜底，**不抄双份**。读+自动写见 `references/capability-map.md` |
-| `reference.md` | Reference | 无需行动、备查 + 项目支持材料 |
-| `horizons.md` | Horizons | 六个高度视野（纵轴：在做对的事） |
-
-> 系统未搭建时先跑 **init**。`memory/gtd/` 是用户运营状态，**不打包进插件，也不要发布到公开仓库或知识索引**。
-
----
-
-## 横轴五步 × 纵轴六高度（GTD 全貌）
-
-```
-横轴（处理任何输入的引擎）：  Capture → Clarify → Organize → Reflect → Engage
-                              收集     理清       组织        回顾      执行
-纵轴（在做对的事）：          50k 目的 / 40k 愿景 / 30k 目标 / 20k 责任领域 / 10k 项目 / 跑道 行动
-```
-横轴保证「事情没漏」，纵轴保证「在做对的事」。只做横轴 = 高效地做着不该做的事。
-
----
-
-## 六场景命令 routing
-
-| 用户意图 | 读取 | 核心动作 |
-|---|---|---|
-| **搭建 / 自检系统** | `init/SKILL.md` | 幂等建八清单 + 安装/刷新 Codex slash 命令 + 适配层自检 + 可选导入旧数据 |
-| **新输入要落盘** | `capture/SKILL.md` | 零摩擦落盘 inbox，**单条默认自动 clarify 归位**；批量先全捕捉再批量理清 |
-| **理清收件箱** | `clarify/SKILL.md` | 决策树：可行动吗 → 2分钟/委派/推迟/项目；不可行动 → 垃圾/someday/reference |
-| **结构卫生（AI 自动）** | `organize/SKILL.md` | 机械类（完成项目/孤儿/stalled/情境/死勾/重复）自动修，只把需拍板的浮上来；engage/review 前自动先扫 |
-| **现在该做什么** | `engage/SKILL.md` | 按情境/时间/精力/优先级四要素选下一步 |
-| **每周回顾** | `review/SKILL.md` | AI 先生成预回顾包，再做 Get Clear/Current/Creative + Horizons 巡检（★关键成功因子） |
-
-## `/gtd` 斜杠命令自动路由
-
-`/gtd` 是 GTD harness 的默认前门，不是第七套流程。它接收自然语言输入，先识别意图，再读取对应子命令 `SKILL.md` 执行；不要要求用户自己选择子命令。
-
-路由优先级：
-
-| 用户输入特征 | 路由到 | 判定口径 |
-|---|---|---|
-| `init`、搭建、自检、状态、安装、初始化 | `init/SKILL.md` | 系统未搭建时也先走 init |
-| 留空、清空大脑、mind sweep、要记一件事、新承诺、硬日期、session 收尾、一句自然语言任务 | `capture/SKILL.md` | 单条默认 capture→clarify；批量先全捕捉 |
-| 理清收件箱、逐条处理、这些待办怎么归、把 inbox 清掉 | `clarify/SKILL.md` | 已经在 inbox 里的 stuff 才直接 clarify |
-| 清理结构、卡住项目、重复项、情境归位、monthly someday、product ideas 卫生 | `organize/SKILL.md` | 机械卫生自动处理，只浮出判断项 |
-| 现在做什么、今天做什么、这会儿、有 30 分钟、按精力/情境筛 | `engage/SKILL.md` | 先 organize，再按四要素选下一步 |
-| 每周回顾、周复盘、review、系统乱了、不信任清单 | `review/SKILL.md` | Weekly Review 是关键成功因子 |
-
-冲突处理：
-- 用户显式写了子命令意图时尊重显式意图。
-- 句子本身是新输入/新承诺时，优先 `capture→clarify`，不要先讲 GTD 理论。
-- `/gtd 帮我清空大脑` 或 `/gtd` 留空时，进入 capture 的 mind-sweep 流程，先请用户逐行倾倒。
-- 纯知识/想法且无承诺时，通过 clarify 闸口移交 ZK 管线，不写入 GTD action 清单。
-- 只有「行动 vs 知识」或「期望成果」无法判断时，问一句短问题；不要让用户选择具体子命令。
-
-**典型链路**：捕捉随时跑（单条 AI 自动接着 clarify 归位、一行回报，可一句话改；批量则先全捕捉再批量理清）→ engage 看「现在做什么」（前置自动 organize 擦干净结构）→ 每周 review 兜底全局。**AI 自动化程度**：capture→clarify 自动、organize 自动（机械类）；engage 给候选；review 先由 AI 生成预回顾包、清理机械卫生、起草候选，最后只让用户确认少数承诺判断。
-
----
-
-## Allen × Luhmann 的关键接缝（不重造捕捉）
-
-捕捉那一刻 GTD 和卡片盒**共享**，在 clarify 门**分流**：
-- 输入是**行动/承诺** → 本系统 `memory/gtd/`
-- 输入是**知识/想法/洞察** → ZK 管线（`fleeting-note` → `file-organize` → `05_每日记录/`）
-
-clarify 第一问「这需要行动吗？」就是这道闸。知识不该堆进 next-actions，行动不该埋进卡片盒。
-
----
-
-## 与旧 open-loops 系统的边界
-
-旧 `memory/open loops.md` + `open-loops` skill **原地保留**，不迁移、不破坏。本包是新的 system of record；旧系统作为 legacy 自然枯竭（如需一次性导入：`init --import-legacy`）。**避免两个收件箱**：新捕捉一律走本包 `capture` → `inbox.md`。
-
----
-
-## Operating Defaults
-
-- 系统未搭建（`memory/gtd/` 不存在）→ 先跑 `init`，不直接写清单。
-- 用户没说清是行动还是知识 → 按 clarify「需要行动吗」判定，模糊则反问一句。
-- 写入清单用 intent 语言落盘（追加到对应清单/分组末尾），不新建分区、不覆盖既有条目。
-- Obsidian 链接规则：指向 `memory/gtd/` 里某个文件内标题时，用 `[[文件名#标题|标题]]`，例如 `[[projects#项目名|项目名]]`；不要把同文件内标题写成裸 `[[标题]]`，否则会被误识别成独立文件。
-- Project 可挂多个当前 next action，但只挂**真正可并行**、互不等待的物理动作；有先后依赖的任务树放支持材料/自然计划模型里，`projects.md` 只显示当前可推进入口。
-- 闭环：用户宣告完成 → 从清单**删除该行**（不打勾留痕，沿用仓库 open loops 约定）。
-- 项目闭环：当 `projects.md` 里的期望成果已经达成，且没有仍需推动的下一步 → **删除整个项目块**。不要把已完成项目留作记录，也不要写「下一步行动：无」。
-
-## 与外部 skill 接口
-
-| 何时 | 移交给 |
+| 文件 | 用途 |
 |---|---|
-| 输入是知识/洞察而非行动 | `fleeting-note` / `file-organize`（ZK 管线） |
-| 项目需要纵向规划（成果→里程碑→下一步） | 本包 `references/natural-planning-model.md`；复杂决策叠加 `strategic-advisor` |
-| 1:1 / 项目会前要议程 | 旧 `open-loops` agenda 模式（Grove 优先级）或 review 的 @议程 视图 |
+| `inbox.md` | 未理清输入的唯一入口 |
+| `next-actions.md` | 已理清的单步行动池 |
+| `projects.md` | >1 步的期望成果 |
+| `waiting-for.md` | 委派 / 等别人 |
+| `calendar.md` | hard landscape；外部 calendar provider 不可达时才兜底 |
+| `someday-maybe.md` | 暂不承诺但不愿忘 |
+| `reference.md` | 无需行动的备查 / 项目支持材料 |
+| `horizons.md` | 六高度方向校准 |
+| `product-ideas.md` | 产品 / 功能 / 场景机会入口 |
 
-## 不做
+## 路由
 
-- 不在 SKILL.md 写平台工具名（保持适配层中立，翻译交给 `references/capability-map.md`）。
-- 不把知识笔记塞进 GTD 清单（走 ZK 管线）。
-- 不在 `calendar.md` 放普通待办（只放硬性时间地形，否则日历失去可信度）。
-- 不跳过每周回顾（无 Reflect 不算 GTD）。
-- **不维护双日历**：真实 GCal 可达时是唯一 hard landscape，calendar.md 仅兜底不抄副本。
-- 日历写入是高后果操作，但日程信息完整时自动写入 GCal，无需逐次确认；tool 成功才算数，绝不谎报（见 capability-map.md）。
-- Apple Reminders 仍留 v2；GCal 读+自动写已在 v1.10 接入（按平台可达性降级）。
+| 用户意图 | 必读 | 动作 |
+|---|---|---|
+| 搭建、自检、状态、安装、初始化 | `init/SKILL.md` | 建清单、自检入口、只读检查 automation；显式 `--install-cron` 才安装 |
+| 新输入、清空大脑、session 收尾 | `capture/SKILL.md` | 先落 inbox；单条默认自动 clarify，批量先全捕捉 |
+| 理清 inbox、逐条处理、归位 | `clarify/SKILL.md` | 可行动吗 → 下一步 / 等待 / 项目 / 日历 / someday / reference |
+| 做完了、对方回了、日程改了、取消了 | `update/SKILL.md` | 同步现实变化；销项、推进项目、处理 waiting-for 回应或纠错 |
+| 清理结构、卡住项目、重复项 | `organize/SKILL.md` | 机械卫生自动做，只把需确认项浮上来 |
+| 现在做什么、10 分钟、低精力、采购、准备、该催办 | `engage/SKILL.md` | 按情境 / 时间 / 精力 / 优先级选 3-5 条候选 |
+| 每周回顾、系统乱了、不信任清单 | `review/SKILL.md` | 预回顾包 + Get Clear / Current / Creative + Horizons |
 
-## 演化日志
+## Reference 加载表
 
-- v1（2026-06-02）：六命令包 + memory/gtd/ 八清单 + 三平台适配。决策：不管旧 open loops，按 GTD 第一性原理重建（项目决策）。详见 `references/evolution-log.md`。
-- v1.6（2026-06-02）：review 升级为 AI 预回顾包，新增只读 `scripts/gtd_review_prep.sh`。
-- v1.7（2026-06-02）：GTD 内部标题引用统一改为 Obsidian heading link：`[[文件名#标题|标题]]`，避免裸 `[[标题]]` 被误建成独立文件。
-- v1.8（2026-06-02）：`gtd_init.sh` 内置 Codex slash 命令安装/刷新；单独跑 init 也能补齐 `/gtd*`。
-- v1.9（2026-06-02）：新增 Codex plugin 打包路径；脚本支持 `LLM_GTD_ROOT`、旧 `.cursor` 安装和插件模式下的当前 workspace 状态根。
-- v1.10（2026-06-03）：日程信息完整时自动写入 GCal，不再逐次确认；信息缺关键字段或 GCal 不可达时才降级。
-- v1.11（2026-06-08）：项目块支持挂多个当前 next action block links；仅限可并行动作，stalled 检查改为识别 `next-actions` / `waiting-for` block link，不再把空标题或泛泛指针当有效下一步。
+| 需要判断什么 | 何时读取 |
+|---|---|
+| 清单边界、动作权限、Obsidian 链接 | `references/list-definitions.md`；clarify / organize / review 涉及移动、删除、写入时先读 |
+| 具体下一步是否合格 | `references/clarify-decision-tree.md`；下一步含糊或用户要理清时读 |
+| 日历 provider、自动写入、fallback | `references/capability-map.md`；涉及 hard landscape 或写日历时读 |
+| 自动节律 / cron / Approval Radar | `references/automation-profiles.md`；仅 init `--install-cron` 或 Daily Engage 自动节律时读 |
+| 周回顾步骤 | `references/weekly-review-checklist.md`；review 时读 |
+| 项目纵向规划 | `references/natural-planning-model.md`；项目成果、里程碑、下一步不清时读 |
+| Horizons 纵轴校准 | `references/horizons-of-focus.md`；review 或优先级冲突时读 |
+| 回归评测 | `references/evals.md`；改 skill 前后或做 public sync 前读 |
+
+## 默认规则
+
+- 系统未搭建（`memory/gtd/` 不存在）→ 先跑 init。
+- 单条输入默认 capture → clarify；批量 mind sweep 先全捕捉，再批量理清。
+- 明确是产品 / 功能 / 场景机会 → `product-ideas.md` + project / next-action 可见性；用户明确“只捕捉”时例外。
+- `next-actions.md` 是行动池，不按 `@电脑/@电话` 主导分类；新行动写清预计时长 / 精力档 / 真实约束。
+- 用户宣告完成 → 从清单删除对应 next action；项目成果已达成且无下一步 → 删除项目块。
+- 用户汇报现实变化（完成、回应、改期、取消、纠错）→ 走 update，不重新 capture 成新 inbox。
+- 日历是 hard landscape；普通待办不得进 `calendar.md`。
+- knowledge / idea 无承诺 → 移交 ZK 管线，不写 GTD action 清单。
+- `memory/gtd/personalized.md` 可存本机偏好和私人映射；通用 skill 不依赖它。
+
+## 红线
+
+- 不维护双日历；外部 provider 成功后不在 `calendar.md` 抄副本。
+- 不在外部 tool 返回成功前声称已写日历。
+- 不把 3-5 条 Engage 候选说成今日承诺。
+- 不自动 approve / reject / withdraw / remind / cc。
+- 不把 approval passed、已提交、拿到回复等中间状态误判为最终完成。
+- 不让用户面对全清单；Engage 只给少数可做菜单。

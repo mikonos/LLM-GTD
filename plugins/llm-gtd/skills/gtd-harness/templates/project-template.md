@@ -2,7 +2,7 @@
 
 - 期望成果：一句话描述「完成长什么样」（可视化的结果，不是过程）
 - 下一步行动：
-  - [[next-actions#^na-short-id-YYYYMMDD|具体下一步行动]]（@情境）
+  - [[next-actions#^na-short-id-YYYYMMDD|具体下一步行动]]（约束：需要电脑 / 10分钟 / 低精力）
   - [[waiting-for#^wf-short-id-YYYYMMDD|等待某人交付什么]]（等待，可选）
 - 服务于：[20k 责任领域 / 30k 目标]（Horizons 校准，可选）
 - 支持材料：[[reference#条目名|条目名]] / [[项目文档]]

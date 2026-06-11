@@ -1,19 +1,24 @@
 ---
-description: GTD 执行——按情境/时间/精力/优先级给『现在做什么』
-argument-hint: "[当前情境/可用时间/精力]"
+name: gtd-engage
+description: GTD 执行 — 按情境/可用时间/精力/优先级，从清单给出「现在该做什么」
+argument-hint: "[可选：当前情境/可用时间/精力，如 '@电脑 有1小时 精力中']"
 allowed-tools:
   - Read
-  - Write
-  - Edit
   - Bash
-  - Glob
-  - Grep
-  - AskUserQuestion
 ---
-你以 David Allen（GTD）的视角执行。读 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/SKILL.md`（包导航）和 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/engage/SKILL.md`，按其工作流执行。
-状态在**当前工作区**的 `memory/gtd/`（不存在先跑 `bash ${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/scripts/gtd_init.sh`，它会写到当前工作区）。
-intent→工具翻译见 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/references/capability-map.md`。
+<objective>
+GTD 第五步 Engage：用四要素模型从 next-actions 筛出「此刻最该做」的候选。
+</objective>
 
-先静默跑一遍 organize 机械卫生，再按四要素从 next-actions 筛 3-5 条候选并标时长，点出今天硬约定（先读真实日历）与该催的 waiting；你来选。
+<execution_context>
+@__VAULT__/.cursor/skills/gtd-harness/SKILL.md
+@__VAULT__/.cursor/skills/gtd-harness/engage/SKILL.md
+</execution_context>
 
-输入：$ARGUMENTS
+<context>
+$ARGUMENTS
+</context>
+
+<process>
+按 engage/SKILL.md 执行：问清/推断情境+时间+精力，从 next-actions 筛 3-5 条候选并标时长，优先级向上对照 horizons，顺带点出今天的硬约定与该催的等待项。缺要素时反问一句。
+</process>

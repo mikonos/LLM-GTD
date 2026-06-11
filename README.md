@@ -5,7 +5,7 @@
 **A portable GTD skill for LLM agents.**
 
 Not a todo app. Not another productivity prompt. LLM-GTD is a trusted external system that lets
-Claude Code, Cursor, and Codex help you capture, clarify, organize, choose, and review your work
+Claude Code, Cursor, and Codex help you capture, clarify, update, organize, choose, and review your work
 without turning your life into a pile of half-processed tasks.
 
 > The installable Codex plugin is named `llm-gtd`.
@@ -15,13 +15,13 @@ without turning your life into a pile of half-processed tasks.
 
 You don't hand it a task — you hand it an **intention**:
 
-> **You:** I want to get my daughter into table tennis
-> **LLM-GTD:** Makes it a **project**; first action → *"talk with her for 10 min — does she want to try it, current level, sessions/week…"*. It does **not** enroll, schedule, or contact a coach.
+> **You:** I want to help a family member try a class
+> **LLM-GTD:** Makes it a **project**; first action → *"talk for 10 min — do they want to try it, what constraints matter, how often could this happen…"*. It does **not** enroll, schedule, or contact anyone.
 
 A while later you report back:
 
-> **You:** Talked with her — she's really into it, two sessions/week, ~1h each
-> **LLM-GTD:** Checks the talk off; **advances the project** to *"shortlist 2-3 classes — slots, price, distance, trial options"*; logs the facts as support material; flags your "~1h" as **needs-confirmation**.
+> **You:** Talked it through — they are interested, two sessions/week, ~1h each
+> **LLM-GTD:** Checks the talk off; **advances the project** to *"shortlist 2-3 options — slots, price, distance, trial terms"*; logs the facts as support material; flags your "~1h" as **needs-confirmation**.
 
 A project without a current next action is a stalled promise. LLM-GTD keeps the promise **live across
 days** — you supply judgment and report reality; it does the bookkeeping.
@@ -36,9 +36,9 @@ LLM-GTD gives the agent a skill-backed trusted system:
 
 - plain Markdown state in `memory/gtd/`
 - a full GTD workflow, not just inbox triage
-- one `/gtd` router plus six workflow commands: `init`, `capture`, `clarify`, `organize`, `engage`, `review`
+- one `/gtd` router plus seven workflow commands: `init`, `capture`, `clarify`, `update`, `organize`, `engage`, `review`
 - one shared trusted system across Claude Code, Cursor, and Codex
-- automatic Google Calendar writes for complete schedule items, with fail-closed reporting
+- automatic calendar-provider writes for complete schedule items, with fail-closed reporting
 
 The model does what it is good at: drafting next actions, cleaning structure, spotting stale items,
 and preparing reviews.
@@ -72,6 +72,7 @@ agent-native.
 | set up the trusted system | `gtd-init` | creates the eight GTD lists and checks wiring; legacy installs also refresh Codex slash prompts |
 | capture a thought or task | `gtd-capture` | writes it to inbox first, then auto-clarifies small inputs |
 | process inbox items | `gtd-clarify` | turns vague "stuff" into next actions, projects, waiting-for, reference, or someday |
+| report progress or changes | `gtd-update` | closes completed actions, advances projects, handles waiting-for replies, updates calendar details, or corrects existing state |
 | clean the system | `gtd-organize` | fixes mechanical drift: orphan actions, stalled projects, bad contexts, duplicates |
 | decide what to do now | `gtd-engage` | suggests 3-5 context-fit next actions based on context, time, energy, and priority |
 | run the weekly review | `gtd-review` | generates a read-only prep package, cleans mechanical drift, then reviews inbox/calendar/waiting/projects/horizons |
@@ -86,7 +87,7 @@ LLM-GTD stores its operating state in eight plain Markdown files:
 | File | GTD list | Purpose |
 |---|---|---|
 | `memory/gtd/inbox.md` | Inbox | zero-friction capture sink |
-| `memory/gtd/next-actions.md` | Next Actions | concrete single-step actions grouped by context |
+| `memory/gtd/next-actions.md` | Next Actions | concrete single-step actions in an action pool, with time, energy, and real constraints |
 | `memory/gtd/projects.md` | Projects | outcomes that require more than one action, each with a current next action |
 | `memory/gtd/waiting-for.md` | Waiting For | delegated or pending items, with person and agreement |
 | `memory/gtd/someday-maybe.md` | Someday/Maybe | things you do not commit to now but do not want to lose |
@@ -122,7 +123,7 @@ The same skill package and the same `memory/gtd/` state can be used from multipl
 ## Why It Is Different
 
 **It is a complete GTD loop, not an inbox prompt.**
-Capture, clarify, organize, engage, and review are all first-class.
+Capture, clarify, update, organize, engage, and review are all first-class.
 
 **It packages GTD as a skill, not a chatbot personality.**
 The agent can be replaced. The state and workflow remain.
@@ -135,8 +136,8 @@ Drafting a concrete next action, finding stale projects, and cleaning list struc
 Choosing what you value and what you commit to are not.
 
 **It fails closed around calendar writes.**
-If Google Calendar is connected, it is the only hard landscape. Complete schedule items are written
-to Google Calendar automatically; missing date/time/title fields are clarified first. If the tool
+If external calendar provider is connected, it is the only hard landscape. Complete schedule items are written
+to external calendar provider automatically; missing date/time/title fields are clarified first. If the tool
 fails, LLM-GTD does not pretend anything happened.
 
 ## Install
@@ -151,7 +152,7 @@ This repo is also a Claude Code plugin marketplace. From Claude Code:
 ```
 
 The bundled GTD skill auto-activates on GTD phrasing, and the `/gtd` router plus `/gtd-*` commands
-(`/gtd`, `/gtd-init`, `/gtd-capture`, `/gtd-clarify`, `/gtd-organize`, `/gtd-engage`, `/gtd-review`) are added.
+(`/gtd`, `/gtd-init`, `/gtd-capture`, `/gtd-clarify`, `/gtd-update`, `/gtd-organize`, `/gtd-engage`, `/gtd-review`) are added.
 State is written to your **current workspace**'s `memory/gtd/` — never bundled with the plugin
 (`${CLAUDE_PLUGIN_ROOT}` holds the read-only skill; your lists live in your project). Run `/gtd-init`
 (or just ask) in the workspace where you want your GTD lists to live.
@@ -183,8 +184,8 @@ Run my weekly GTD review
 ```
 
 The plugin writes user state only under that workspace's `memory/gtd/`. It does not bundle any
-personal GTD state, and it does not include Google Calendar as an app or MCP server. If your Codex
-environment already has Google Calendar available, LLM-GTD can use it as the real hard landscape;
+personal GTD state, and it does not include external calendar provider as an app or MCP server. If your Codex
+environment already has external calendar provider available, LLM-GTD can use it as the real hard landscape;
 otherwise it falls back to `memory/gtd/calendar.md`.
 
 ### Install with the legacy multi-surface installer
@@ -219,7 +220,7 @@ It also prints two optional manual wiring steps:
 - Bash
 - Python 3 for status/dashboard helpers
 - Claude Code, Cursor, or Codex, depending on which surface you use
-- Optional: Google Calendar access if you want real calendar reads and automatic writes
+- Optional: external calendar provider access if you want real calendar reads and automatic writes
 
 ## Quick Start
 
@@ -234,6 +235,7 @@ Then try one of these from your agent:
 ```text
 /gtd-capture Renew passport before the summer trip
 /gtd-clarify
+/gtd-update I submitted the passport documents
 /gtd-engage
 /gtd-review
 ```

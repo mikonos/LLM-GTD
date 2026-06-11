@@ -1,6 +1,6 @@
 {
   "name": "llm-gtd",
-  "version": "1.9.0",
+  "version": "1.12.0",
   "description": "LLM-GTD is a portable GTD trusted system for Codex that keeps commitments in plain Markdown lists.",
   "author": {
     "name": "mikonos",
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "LLM-GTD",
     "shortDescription": "Run a GTD trusted system from plain Markdown lists.",
-    "longDescription": "LLM-GTD helps Codex capture, clarify, organize, engage, and review commitments in a durable plain-Markdown GTD system. It initializes eight GTD lists under memory/gtd/, keeps calendar writes confirmation-gated, and uses Google Calendar only when an existing calendar integration is available.",
+    "longDescription": "LLM-GTD helps Codex capture, clarify, update, organize, engage, and review commitments in a durable plain-Markdown GTD system. It initializes GTD lists under memory/gtd/, treats progress reports as state updates instead of new inbox items, and uses a calendar provider only when an existing integration is available.",
     "developerName": "mikonos",
     "category": "Productivity",
     "capabilities": [
@@ -33,6 +33,7 @@
     "defaultPrompt": [
       "Set up my GTD trusted system",
       "Capture and clarify this task",
+      "Update this GTD project status",
       "Run my weekly GTD review"
     ],
     "brandColor": "#2563EB",

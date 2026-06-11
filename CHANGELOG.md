@@ -1,6 +1,12 @@
 # Changelog
 
-All notable changes. See `src/skill/references/evolution-log.md` for the in-skill log.
+All notable changes.
+
+## v1.12 — Update command for reported reality
+Added `gtd-update` for progress reports and corrections: completed next actions,
+waiting-for replies, project facts, calendar changes, cancellations, and minimal
+state edits. The `/gtd` router now treats "done / confirmed / replied / changed"
+wording as an update instead of recapturing it as a new inbox item.
 
 ## v1.11 — Multiple current next actions per project
 Projects can now list multiple current next-action / waiting-for block links
@@ -8,11 +14,11 @@ when the actions can proceed in parallel. Stalled-project detection now requires
 a concrete `next-actions` or `waiting-for` block link, so empty headings and
 generic "see next-actions" pointers no longer count as coverage.
 
-## v1.10 — GCal auto-write
-Complete schedule items now write directly to Google Calendar without per-event
-confirmation. Missing date/time/title fields are clarified first; unavailable or
-failed GCal writes fall back to `memory/gtd/calendar.md` and are never reported
-as successful.
+## v1.10 — Calendar-provider auto-write
+Complete schedule items now write directly to an available calendar provider
+without per-event confirmation. Missing date/time/title fields are clarified
+first; unavailable or failed provider writes fall back to `memory/gtd/calendar.md`
+and are never reported as successful.
 
 ## v1.9 — Codex plugin package
 Added a repo-scoped Codex plugin package under `plugins/llm-gtd/` plus
@@ -50,8 +56,8 @@ Bulk / mind-sweep is captured first, then batch-clarified. Off-switch: "capture 
 Global `~/.codex/prompts/gtd*.md` (vault-aware fail-soft), AGENTS.md routing,
 plus Claude Code commands and Cursor keyword rules. One source, one `memory/gtd/` state.
 
-## v1.1 — Calendar reuse (Google Calendar, read + confirmed write)
-Real Google Calendar becomes the single hard landscape when connected; `calendar.md` is fallback only.
+## v1.1 — Calendar reuse (provider read + confirmed write)
+An available calendar provider becomes the single hard landscape; `calendar.md` is fallback only.
 Writes are drafted, confirmed, and only claimed done on tool success — fail-closed.
 
 ## v1.0 — Initial

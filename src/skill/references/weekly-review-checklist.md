@@ -5,7 +5,7 @@
 ## 0. AI 预回顾包（先让系统把脏活做掉）
 - [ ] 跑 `scripts/gtd_review_prep.sh`，拿全景数字 + 风险项 + 确认队列
 - [ ] 自动执行 organize 的机械卫生：错情境、重复、死勾、明显孤儿、stalled 检出
-- [ ] 生成候选：待删/待补下一步/待催办/可能启动的 someday/下周 3 件事
+- [ ] 生成候选：待删/待补下一步/待催办/可能启动的 someday/product ideas 可见性缺口/下周 3 件事
 - [ ] 标出哪些是 AI 已自动处理，哪些必须用户确认
 
 ## ① Get Clear（清空）
@@ -17,21 +17,27 @@
 - [ ] `calendar.md`：回看上周（有无遗留收尾）+ 前看本周（硬约定准备好了吗）
 - [ ] `waiting-for.md`：逐条看委派日期，哪些该催了？
 - [ ] `projects.md`：先删掉成果已达成的项目；剩余项目确认挂着至少一个有效下一步 block link；多条只保留可并行动作（stalled 当场补）；成果是否仍想要？
+- [ ] `product-ideas.md`：每条产品机会是否都有 `GTD 可见性`，且能指向 project / next-action？缺失的当场补。
 
 ## ③ Get Creative（创造）
 - [ ] `someday-maybe.md`：有哪条成熟了，拉进 active？过时的删
+- [ ] `product-ideas.md`：哪些产品机会需要补证据、删除、降级，或推进到 PRD？这里做产品取舍，不再做结构可见性校验。
 - [ ] 本周有无新念头/项目要加入？
 
 ## ④ Horizons 巡检（纵轴）
 - [ ] 读 `horizons.md`，问：当前项目是否服务于 30k 目标 / 20k 责任领域？
 - [ ] 有没有「高效地做着不该做的事」的项目 → 砍或重估
 
+## ⑤ 三环平衡审计（横轴 · Laura Vanderkam）
+- [ ] 把 20k 责任领域粗分到 career / relationships / self，看是否全压在 career、另两类挂零
+- [ ] 挂零的一类补一件「有名字」的事（具体活动 + 时间 + 频率）占进下周；只提示不评判、可跳过
+
 ## 收尾
 - [ ] 用 `templates/weekly-review-template.md` 记一份快照（落 `05_每日记录/`）
-- [ ] 给出下周最该推进的 **3 件事**
-- [ ] 确认后再落盘：清 inbox、销项、补下一步、移动 someday、更新 waiting-for/projects
+- [ ] 给出下周最该推进的 **3 件事**；对没排进的做「我没时间=不是优先级」翻译；高价值那件配同周内 back-up slot；重复性的事「三次/周即习惯」
+- [ ] 确认后再落盘：清 inbox、销项、补下一步、移动 someday、补齐 product ideas 可见性、推进/降级/删除 product ideas、更新 waiting-for/projects
 
 ## 触发节律建议
-- v1.6：每周固定时段跑 `/gtd-review`；AI 先生成预回顾包，用户只确认少数判断点。
-- 可选自动提醒：用 loop / cron / launchd 每周一次调用 `scripts/gtd_review_prep.sh` 并提示开始 review。**需用户明确同意再装**，不默认开启。
-- 定时任务只能提醒和生成预回顾包；不自动删改清单、不写日历、不发消息、不确定下周重点。
+- v1.1：每周固定时段跑 `/gtd-review`；AI 先生成预回顾包，用户只确认少数判断点。
+- 可选自动节律：按 `references/automation-profiles.md` 安装 Weekly Review profile。**需用户明确同意再装**，不默认开启。
+- 定时任务可以生成预回顾包并给出 AI 判断版候选，但不自动删改清单、不写日历、不发消息、不替用户确定下周承诺。

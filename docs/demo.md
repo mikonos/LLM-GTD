@@ -17,7 +17,7 @@ project alive without you re-planning.
 
 > You:
 ```
-/gtd I want to get my daughter into table tennis
+/gtd I want to get my family member into a class
 ```
 > LLM-GTD:
 ```
@@ -42,7 +42,7 @@ to that person — and it deferred the research step on purpose.*
 
 > You:
 ```
-/gtd Talked with my daughter — she's really into table tennis, can do two sessions/week, ~1h each
+/gtd-update Talked with my family member — she's really into a class, can do two sessions/week, ~1h each
 ```
 > LLM-GTD:
 ```
@@ -59,7 +59,8 @@ I read your "~1h" as the session length but marked it needs-confirmation.
 
 Check: Inbox 0, Projects 3, no stalled.
 ```
-*The project moved one step forward on its own. The completed action was closed, the new next action
+*This is the explicit update form; the general `/gtd` router would choose the same path
+from the "talked with..." wording. The project moved one step forward on its own. The completed action was closed, the new next action
 was derived from what you learned, support material captured the facts, and an inferred detail
 ("~1h") was flagged rather than assumed.*
 
@@ -156,5 +157,6 @@ Help me clear my head.
 ## What stayed human
 
 Capture, clarify, and mechanical organize were automated. **Engage** (what to do now) and
+**Update** handles reported reality, while **Engage** (what to do now) and
 **Review** (is this still the right direction) kept you in the loop by design — which is exactly
 where GTD's value lives.

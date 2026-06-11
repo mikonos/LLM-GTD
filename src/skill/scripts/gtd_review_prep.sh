@@ -10,7 +10,7 @@ VAULT_ROOT="$GTD_WORKSPACE_ROOT"
 GTD_DIR="$VAULT_ROOT/memory/gtd"
 
 if [ ! -d "$GTD_DIR" ]; then
-  echo "memory/gtd/ 不存在。先跑：bash .cursor/skills/gtd-harness/scripts/gtd_init.sh"
+  echo "memory/gtd/ 不存在。先跑本 skill 的 scripts/gtd_init.sh"
   exit 1
 fi
 
@@ -79,14 +79,65 @@ vague_next_actions() {
   grep -nE '^- \[ \] .*(跟进|处理|推进|研究|看看|了解|想想|弄一下|搞一下)' "$f" 2>/dev/null || true
 }
 
+product_ideas_summary() {
+  local f
+  f="$(file product-ideas.md)"
+  [ -f "$f" ] || return 0
+  awk '
+    function flush() {
+      if (title != "") {
+        print "- " title
+        if (opportunity != "") print "  " opportunity
+        if (visibility != "") print "  " visibility
+        else print "  ⚠️ 缺 GTD 可见性"
+      }
+    }
+    /^### / {
+      flush()
+      title=$0
+      sub(/^### /, "", title)
+      opportunity=""
+      visibility=""
+      next
+    }
+    /^- \[ \] 机会：/ { opportunity=$0; next }
+    /^- GTD 可见性：/ { visibility=$0; next }
+    END { flush() }
+  ' "$f"
+}
+
+product_visibility_gaps() {
+  local f
+  f="$(file product-ideas.md)"
+  [ -f "$f" ] || return 0
+  awk '
+    function check() {
+      if (title != "" && visibility !~ /\[\[projects#/) {
+        print title "：缺 project 可见性"
+      } else if (title != "" && visibility !~ /next-actions/) {
+        print title "：缺 next-actions 可见性"
+      }
+    }
+    /^### / {
+      check()
+      title=$0
+      sub(/^### /, "", title)
+      visibility=""
+      next
+    }
+    /^- GTD 可见性：/ { visibility=$0; next }
+    END { check() }
+  ' "$f"
+}
+
 today="$(date +%Y-%m-%d)"
 
 echo "GTD Review Prep · $today"
 echo "只读预回顾包：用于 review 前扫描，不修改 memory/gtd/。"
 
-if [ -x "$SCRIPT_DIR/gtd_status.sh" ]; then
+if [ -f "$SCRIPT_DIR/gtd_status.sh" ]; then
   echo ""
-  "$SCRIPT_DIR/gtd_status.sh"
+  bash "$SCRIPT_DIR/gtd_status.sh"
 else
   section "Dashboard"
   echo "未找到 gtd_status.sh。"
@@ -135,9 +186,26 @@ else
   echo "无。"
 fi
 
+section "Product Ideas 可见性审计"
+product_gaps="$(product_visibility_gaps)"
+if [ -n "$product_gaps" ]; then
+  echo "$product_gaps" | sed 's/^/- /'
+else
+  echo "全部产品机会都有 GTD 可见性。"
+fi
+
+section "Product Ideas 工作入口"
+product_items="$(product_ideas_summary)"
+if [ -n "$product_items" ]; then
+  echo "$product_items"
+else
+  echo "无。"
+fi
+
 section "确认队列"
 echo "- 清空 inbox：逐项 clarify 到零。"
 echo "- stalled projects：为每个项目补至少一个具体下一步；必要时挂多个可并行动作，或确认砍掉。"
 echo "- waiting-for：确认哪些要催，AI 可先起草中性话术。"
 echo "- someday/maybe：确认是否启动、删除或继续孵化。"
+echo "- product ideas：先补齐缺失的 project / next-action 可见性；再确认补证据、推进 PRD、降级或删除。"
 echo "- 下周 3 件事：由 AI 给候选，用户最后确认。"

@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# gtd_init.sh — 幂等搭建 GTD 可信系统（memory/gtd/ 八清单）+ 自检适配层
+# gtd_init.sh — 幂等搭建 GTD 可信系统（memory/gtd/ 核心八清单 + 产品想法扩展清单）+ 自检适配层 + 自动节律只读检查
 #
 # 用法：
-#   bash gtd_init.sh                 # 幂等建八清单 + 自检（已存在清单不覆盖）
+#   bash gtd_init.sh                 # 幂等建核心八清单 + 产品想法扩展清单 + 自检 + 自动节律只读检查（已存在的不覆盖）
 #   bash gtd_init.sh --import-legacy # 额外：一次性从旧 memory/open loops.md 导入（旧文件不改）
-#   bash gtd_init.sh --status        # 只做自检与就绪报告，不写文件
+#   bash gtd_init.sh --status        # 只做自检、自动节律只读检查与就绪报告，不写文件
+#   bash gtd_init.sh --install-cron  # 显式请求安装 GTD 自动节律；纯 shell 只输出 agent handoff，创建由 gtd-init skill 调用平台 automation 工具完成
 #
-# 设计：David Allen GTD —— 可信系统必须完整（八清单物理分开）且零数据破坏（重跑安全）。
+# 设计：David Allen GTD —— 可信系统必须完整（核心八清单物理分开）且零数据破坏（重跑安全）。
 # 兼容 macOS bash 3.2（不使用关联数组 / mapfile）。
 
 set -euo pipefail
@@ -17,17 +18,20 @@ SKILL_DIR="$GTD_SKILL_DIR"
 VAULT_ROOT="$GTD_WORKSPACE_ROOT"
 GTD_DIR="$VAULT_ROOT/memory/gtd"
 LEGACY_FILE="$VAULT_ROOT/memory/open loops.md"
+AUTOMATIONS_DIR="${CODEX_HOME:-$HOME/.codex}/automations"
 CODEX_HOME_DIR="${CODEX_HOME:-$HOME/.codex}"
 CODEX_PROMPTS_DIR="$CODEX_HOME_DIR/prompts"
 CODEX_PROMPT_TEMPLATES="$SKILL_DIR/templates/codex-prompts"
-CODEX_PROMPT_FILES="gtd.md gtd-init.md gtd-capture.md gtd-clarify.md gtd-organize.md gtd-engage.md gtd-review.md"
+CODEX_PROMPT_FILES="gtd.md gtd-init.md gtd-capture.md gtd-clarify.md gtd-update.md gtd-organize.md gtd-engage.md gtd-review.md"
 
 IMPORT_LEGACY=0
 STATUS_ONLY=0
+INSTALL_CRON=0
 for arg in "$@"; do
   case "$arg" in
     --import-legacy) IMPORT_LEGACY=1 ;;
     --status)        STATUS_ONLY=1 ;;
+    --install-cron)  INSTALL_CRON=1 ;;
     *) echo "未知参数：$arg" >&2; exit 2 ;;
   esac
 done
@@ -87,7 +91,7 @@ selfcheck() {
       echo "  ⚠️  Codex slash 命令缺失 $missing_codex 个：$CODEX_PROMPTS_DIR/gtd*.md（旧安装模式下 init 会自动安装/刷新）"
     fi
   else
-    echo "  ℹ️  Codex 插件模式：以当前工作区作为 GTD 状态根；不需要旧 slash prompt 接线。"
+    echo "  ℹ️  插件模式：以当前工作区作为 GTD 状态根；不需要旧符号链接入口。"
   fi
 
   if [ -d "$CODEX_PROMPT_TEMPLATES" ]; then
@@ -129,6 +133,63 @@ install_codex_prompts() {
   echo "  ✅ Codex slash 命令 → ${CODEX_PROMPTS_DIR}/（新装 ${installed}，更新 ${updated}，未变 ${unchanged}）"
 }
 
+# ── 自检：自动节律现状（只读，不创建 cron / automation）──
+automation_status() {
+  local id="$1"
+  local label="$2"
+  local file="$AUTOMATIONS_DIR/$id/automation.toml"
+  if [ -f "$file" ]; then
+    local status name
+    status="$(awk -F'"' '/^status = / {print $2; exit}' "$file" 2>/dev/null || true)"
+    name="$(awk -F'"' '/^name = / {print $2; exit}' "$file" 2>/dev/null || true)"
+    [ -n "$status" ] || status="UNKNOWN"
+    [ -n "$name" ] || name="$id"
+    echo "  ✅ ${label}：已安装（${name}，${status}）"
+  else
+    echo "  ⚪ ${label}：未安装（需显式安装；见 references/automation-profiles.md）"
+  fi
+}
+
+automation_selfcheck() {
+  echo ""
+  echo "── 自动节律自检（只读，不创建）──"
+  if [ ! -d "$AUTOMATIONS_DIR" ]; then
+    echo "  ⚪ 未找到 Codex automations 目录：$AUTOMATIONS_DIR"
+    echo "  ℹ️  若要安装节律，先读 references/automation-profiles.md，再用平台原生 automation 工具显式创建。"
+    return 0
+  fi
+
+  automation_status "gtd-ai" "每周 Review"
+  automation_status "gtd-2" "月度 Reflect"
+
+  local daily_found=0
+  if [ -f "$AUTOMATIONS_DIR/gtd/automation.toml" ]; then
+    automation_status "gtd" "每日 Engage（上午）"
+    daily_found=1
+  fi
+  if [ -f "$AUTOMATIONS_DIR/gtd-engage/automation.toml" ]; then
+    automation_status "gtd-engage" "每日 Engage（晚间）"
+    daily_found=1
+  fi
+  if [ "$daily_found" -eq 0 ]; then
+    echo "  ⚪ 每日 Engage：未安装（可选；Approval Radar 可随 Daily Engage 一起启用）"
+  fi
+
+  echo "  ℹ️  init 只检查，不静默创建；安装/修改 cron 必须由用户显式同意。"
+}
+
+cron_install_handoff() {
+  echo ""
+  echo "── 自动节律安装请求（agent handoff）──"
+  echo "  已检测到 --install-cron。"
+  echo "  纯 shell 不能调用 Codex app 的 automation 工具，也不应手写 ~/.codex/automations。"
+  echo "  在 Codex / gtd-init skill 场景中，请按 references/automation-profiles.md 调用 automation_update："
+  echo "  1. 安装/更新 Weekly Review"
+  echo "  2. 安装/更新 Monthly Reflect"
+  echo "  3. 安装/更新 Daily Engage + Approval Radar（若启用 approval provider）"
+  echo "  完成后重跑：bash scripts/gtd_init.sh --status（旧安装可用 .cursor/skills/gtd-harness/scripts/gtd_init.sh）"
+}
+
 # ── 可选：从旧 open loops.md 导入（旧文件只读，不改）──
 import_legacy() {
   if [ ! -f "$LEGACY_FILE" ]; then
@@ -154,9 +215,9 @@ import_legacy() {
   }
   {
     echo ""
-    echo "## 待重新归情境（legacy import $(cat "$VAULT_ROOT/.gtd_import_stamp" 2>/dev/null || echo "imported"))"
+    echo "## 待补轻字段（legacy import $(cat "$VAULT_ROOT/.gtd_import_stamp" 2>/dev/null || echo "imported"))"
     echo "$marker"
-    echo "> 从旧 @自己 导入；逐条用 /gtd-clarify 重新判定情境后移入上方 @电脑/@电话/… 分组。"
+    echo "> 从旧 @自己 导入；逐条用 /gtd-clarify 补预计时长 / 精力档 / 真实约束。旧 @ 分组只作兼容，不强制迁移。"
     extract "@自己"
   } >> "$na"
   { echo ""; echo "<!-- imported-from-legacy-open-loops -->"; extract "@等待"; } >> "$wf"
@@ -169,11 +230,15 @@ import_legacy() {
 }
 
 # ════════════════════════════════════════════════════════
-echo "GTD Harness · init"
+echo "GTD Skill · init"
 echo "Vault：$VAULT_ROOT"
 
 if [ "$STATUS_ONLY" -eq 1 ]; then
   selfcheck
+  automation_selfcheck
+  if [ "$INSTALL_CRON" -eq 1 ]; then
+    cron_install_handoff
+  fi
   echo ""
   echo "（--status 模式，未写任何文件）"
   exit 0
@@ -181,7 +246,7 @@ fi
 
 mkdir -p "$GTD_DIR"
 echo ""
-echo "── 搭建 memory/gtd/ 八清单（已存在的跳过）──"
+echo "── 搭建 memory/gtd/ 核心八清单 + 产品想法扩展清单（已存在的跳过）──"
 
 seed "$GTD_DIR/inbox.md" <<'EOF'
 # 📥 Inbox（收件箱）
@@ -196,24 +261,25 @@ EOF
 seed "$GTD_DIR/next-actions.md" <<'EOF'
 # ✅ Next Actions（下一步行动）
 
-> 已理清、可立即执行的单步动作。**按情境分组**——你此刻在什么环境/有什么工具，就看对应分组。
+> 已理清、可立即执行的单步动作行动池。Engage 按情境 / 时间 / 精力 / 优先级临场筛 3-5 条菜单，不要求你面对全清单。
 > 动词必须具体（确认/发送/打电话/写），不写「跟进/处理/研究」等空动词。
-> 格式：`- [ ] 具体动作 · 项目：[[projects#项目名|项目名]]（如属于项目）· 来源：[[笔记]] · 日期：YYYYMMDD`
+> 格式：`- [ ] 具体动作 · 预计时长：10分钟 · 精力档：低精力 · 真实约束：需要电脑/采购/准备链/某人在场 · 项目：[[projects#项目名|项目名]]（如属于项目）· 来源：[[笔记]] · 日期：YYYYMMDD`
+> 兼容旧 `@电脑/@电话/@外出/@家/@议程` 分组；它们是工具/场景约束，不再是主结构。
 
 ## @电脑
-> 需要电脑/联网才能做的。
+> 旧兼容分组：需要电脑/联网是工具约束，不代表 Engage 默认优先推荐。
 
 ## @电话
-> 打电话/语音就能推进的。
+> 旧兼容分组：电话/语音是渠道约束。
 
 ## @外出
-> 出门在外顺路办的（采购/线下）。
+> 旧兼容分组：外出顺路 / 采购 / 线下办理等硬场景。
 
 ## @家
-> 只能在家做的。
+> 旧兼容分组：在家有材料/设备/环境才能做的。
 
 ## @议程-[人名]
-> 下次见到/聊到某人时要提的（按人开子分组，如 `### @议程-Alex`）。
+> 旧兼容分组：下次见到/聊到某人时要提的（按人开子分组，如 `### @议程-老师A`）。
 
 EOF
 
@@ -226,7 +292,7 @@ seed "$GTD_DIR/projects.md" <<'EOF'
 > ## [项目名]
 > - 期望成果：一句话描述「完成长什么样」
 > - 下一步行动：
->   - [[next-actions#^block-id|具体下一步行动]]（情境）
+>   - [[next-actions#^block-id|具体下一步行动]]（约束/镜头）
 >   - [[waiting-for#^block-id|等待某人交付什么]]（等待，可选）
 > - 支持材料：[[reference#条目名|条目名]] / [[项目文档]]
 > - 来源：[[笔记]] · 日期：YYYYMMDD
@@ -259,16 +325,29 @@ seed "$GTD_DIR/someday-maybe.md" <<'EOF'
 
 EOF
 
+seed "$GTD_DIR/product-ideas.md" <<'EOF'
+# Product Ideas / Product Work Intake（产品想法 / 产品工作入口）
+
+> 明确属于产品、功能、场景、机会域的输入放这里，保留原始机会、假设和证据状态。
+> 本文件不是冷藏箱：产品/需求规划是主要工作，每条 idea 默认还要同步到 `projects.md` / `next-actions.md`，进入日常可见系统。
+> 只有明确说「先存不处理 / 只捕捉」时，才暂不升级为可见工作项。
+> Teresa Torres 口径：先保留 opportunity，不急着变 solution；但 GTD 层必须给出下一步验证动作。
+> 格式：每个想法一个小节；用 `- [ ] 机会：...` 作为计数行，并写明 `GTD 可见性`。
+
+## 机会池
+
+EOF
+
 seed "$GTD_DIR/calendar.md" <<'EOF'
 # 📅 Calendar（硬性时间地形 · hard landscape）
 
 > **只放**特定日期/特定时间才有意义的事——会议、约定、deadline、特定日才能做的动作。
 > Allen 铁律：日历是「圣地」，**不放**普通待办（那些归 next-actions）。一放杂事，日历就失去可信度。
 >
-> **单一日历（v1.10）**：真实 **Google Calendar** 可达时它是唯一 hard landscape，engage/review 直接读它，日程信息完整时自动写入 GCal（见 `references/capability-map.md`）。**本文件仅在 GCal 不可达时兜底**——记下「待手动加入日历」的时间事，**绝不抄 GCal 副本**。Apple Reminders 留 v2。
-> 兜底格式：`- YYYY-MM-DD [HH:MM] · 事项 · 来源：[[笔记]] · ⚠️待手动加入 GCal`
+> **单一日历**：外部 calendar provider 可达时它是 hard landscape，engage/review 直接读它，日程信息完整时可自动写入（见 `references/capability-map.md`）。**本文件仅在外部 provider 不可达时兜底**——记下「待手动加入日历」的时间事，**绝不抄外部日历副本**。reminder provider 留 v2。
+> 兜底格式：`- YYYY-MM-DD [HH:MM] · 事项 · 来源：[[笔记]] · ⚠️待手动加入外部日历`
 
-## 时间专属事项（兜底 · GCal 不可达时）
+## 时间专属事项（兜底 · 外部 calendar provider 不可达时）
 
 EOF
 
@@ -328,18 +407,21 @@ if [ "$IMPORT_LEGACY" -eq 1 ]; then
   import_legacy
 fi
 
-echo ""
 if [ "$GTD_LEGACY_VAULT_INSTALL" -eq 1 ]; then
   echo ""
   echo "── 安装/刷新 Codex slash 命令（全局）──"
   install_codex_prompts
 else
   echo ""
-  echo "── Codex 插件模式 ──"
-  echo "  跳过旧全局 slash prompt 安装；请从 Codex 插件入口调用 LLM-GTD。"
+  echo "── 插件模式 ──"
+  echo "  跳过旧全局 slash prompt 安装；请从插件入口调用 LLM-GTD。"
 fi
 
 selfcheck
+automation_selfcheck
+if [ "$INSTALL_CRON" -eq 1 ]; then
+  cron_install_handoff
+fi
 
 echo ""
 echo "── 就绪报告 ──"
@@ -351,3 +433,4 @@ fi
 echo ""
 echo "  下一步：跑一次捕捉 —— 调用 gtd-harness 的 capture 流程（旧安装可用 /gtd-capture）"
 echo "  看全景仪表盘：运行 scripts/gtd_status.sh（旧安装可用 bash .cursor/skills/gtd-harness/scripts/gtd_status.sh）"
+echo "  自动节律：见 references/automation-profiles.md；通过 gtd init --install-cron 由 agent 调用 automation 工具安装"

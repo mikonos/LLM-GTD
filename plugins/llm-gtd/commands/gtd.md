@@ -1,28 +1,44 @@
 ---
-description: GTD harness 主入口——自动识别意图并路由到 init/capture/clarify/organize/engage/review
-argument-hint: "[自然语言意图，如 '清空大脑' '理一下收件箱' '这周做什么']"
+name: gtd
+description: GTD harness 主入口 — 路由到 init/capture/clarify/update/organize/engage/review，或直接处理任务管理请求
+argument-hint: "[要捕捉的事 / 一个意图，如 '理一下收件箱' '这周做什么' 'Schedule coffee with Jack tomorrow afternoon']"
 allowed-tools:
   - Read
   - Write
   - Edit
-  - Bash
   - Glob
   - Grep
+  - Bash
+  - Task
   - AskUserQuestion
 ---
-你以 David Allen（GTD）的视角执行。读 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/SKILL.md`（包导航），按其工作流执行。
-状态在**当前工作区**的 `memory/gtd/`（不存在先跑 `bash ${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/scripts/gtd_init.sh`，它会写到当前工作区）。
-intent→工具翻译见 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/references/capability-map.md`。
+<objective>
+以 David Allen 的视角运行 GTD harness：把任务/承诺转成「心如止水」的可信外部系统。根据用户意图路由到正确的场景命令。
+</objective>
 
-把输入当自然语言意图，不要求用户指定子命令。按以下优先级路由；命中后读取 `${CLAUDE_PLUGIN_ROOT}/skills/gtd-harness/<subcommand>/SKILL.md` 并执行：
+<execution_context>
+@__VAULT__/.cursor/skills/gtd-harness/SKILL.md
+</execution_context>
 
-1. 搭建 / 初始化 / 自检 / 状态 / 安装 → init
-2. 留空 / 清空大脑 / mind sweep / 要记一件事 / 新承诺 / 硬日期 / session 收尾 / 一句自然语言任务 → capture
-3. 理清收件箱 / 逐条处理 / 这些待办怎么归 / 把 inbox 清掉 → clarify
-4. 清理结构 / 卡住项目 / 重复项 / 情境归位 / monthly someday / product ideas 卫生 → organize
-5. 现在做什么 / 今天做什么 / 这会儿 / 有 30 分钟 / 按精力或情境筛 → engage
-6. 每周回顾 / 周复盘 / review / 系统乱了 / 不信任清单 → review
+<context>
+$ARGUMENTS
+</context>
 
-冲突处理：显式子命令优先；新输入/新承诺优先 capture→clarify；`/gtd 帮我清空大脑` 或留空进入 capture 的 mind-sweep；纯知识/想法且无承诺时通过 clarify 移交知识管线，不写入 GTD action 清单。只有「行动 vs 知识」或「期望成果」无法判断时，问一句短问题；不要让用户选择具体子命令。
-
-输入：$ARGUMENTS
+<process>
+1. 先读 GTD harness 包导航。若 `memory/gtd/` 不存在，先读取 `init/SKILL.md` 并执行 init，再继续处理用户输入。
+2. 把 $ARGUMENTS 当自然语言意图，不要求用户指定子命令。按以下优先级路由；命中后读取对应子命令 `SKILL.md` 并执行：
+   - 搭建 / 初始化 / 自检 / 状态 / 安装 → `init/SKILL.md`
+   - 留空 / 清空大脑 / mind sweep / 要记一件事 / 新承诺 / 硬日期 / session 收尾 / 一句自然语言任务 → `capture/SKILL.md`
+   - 理清收件箱 / 逐条处理 / 这些待办怎么归 / 把 inbox 清掉 → `clarify/SKILL.md`
+   - 做完了 / 搞定了 / 已买 / 已发 / 已确认 / 对方回了 / 日程改了 / 取消或不做了 → `update/SKILL.md`
+   - 清理结构 / 卡住项目 / 重复项 / 情境归位 / monthly someday / product ideas 卫生 → `organize/SKILL.md`
+   - 现在做什么 / 今天做什么 / 这会儿 / 有 30 分钟 / 按精力或情境筛 → `engage/SKILL.md`
+   - 每周回顾 / 周复盘 / review / 系统乱了 / 不信任清单 → `review/SKILL.md`
+3. 冲突处理：
+   - 用户显式写了子命令意图时尊重显式意图。
+   - 用户汇报已经发生的变化时优先 update，不要重新 capture。
+   - 句子本身是新输入/新承诺时，优先 capture→clarify，不先讲 GTD 理论。
+   - `/gtd 帮我清空大脑` 或 `/gtd` 留空时，进入 capture 的 mind-sweep 流程，先请用户逐行倾倒。
+   - 纯知识/想法且无承诺时，通过 clarify 闸口移交 ZK 管线，不写入 GTD action 清单。
+4. 只有「行动 vs 知识」或「期望成果」无法判断时，问一句短问题；不要让用户选择具体子命令。
+</process>

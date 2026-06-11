@@ -4,7 +4,7 @@
 
 **给 LLM Agent 用的可移植 GTD skill。**
 
-它不是 todo app，也不是又一个效率提示词。LLM-GTD 是一套可信外部系统，让 Claude Code、Cursor 和 Codex 可以帮你收集、理清、组织、选择和回顾任务，同时不把你的生活变成一堆半处理的待办。
+它不是 todo app，也不是又一个效率提示词。LLM-GTD 是一套可信外部系统，让 Claude Code、Cursor 和 Codex 可以帮你收集、理清、更新、组织、选择和回顾任务，同时不把你的生活变成一堆半处理的待办。
 
 > 可安装的 Codex 插件名叫 `llm-gtd`。
 > 旧版 skill 包继续叫 `gtd-harness`，用于兼容 Cursor 和手动安装。
@@ -13,13 +13,13 @@
 
 你交给它的不是一条任务，而是一个**意图**：
 
-> **你：** 我要培养我家女儿的乒乓球
-> **LLM-GTD：** 把它建成一个**项目**；第一步 → *「和女儿聊 10 分钟，确认她想不想尝试、已有水平、每周能接受的频率…」*。它**没有**报名、排课或联系教练。
+> **你：** 我要帮家里人试一项课程
+> **LLM-GTD：** 把它建成一个**项目**；第一步 → *「和家庭成员聊 10 分钟，确认意愿、边界、每周可接受频率…」*。它**没有**报名、排课或联系教练。
 
 过了一会儿你回来汇报：
 
-> **你：** 我跟女儿聊完了，她很有兴趣，每周可以上两次课、每次约 1 小时
-> **LLM-GTD：** 把「聊 10 分钟」销项；**推进项目**到 *「筛选 2-3 个乒乓球课——时段、费用、距离、试课」*；把事实记进支持材料；把你说的「~1 小时」标成**待确认**。
+> **你：** 我聊完了，对方有兴趣，每周可以安排两次、每次约 1 小时
+> **LLM-GTD：** 把「聊 10 分钟」销项；**推进项目**到 *「筛选 2-3 个课程选项——时段、费用、距离、试课条件」*；把事实记进支持材料；把你说的「~1 小时」标成**待确认**。
 
 一个没有当前下一步的项目，就是一个卡住的承诺。LLM-GTD 跨天把承诺**一直挂活**——你提供判断、汇报现实，它替你做记账。
 → [完整走查](docs/demo.zh-CN.md)
@@ -32,9 +32,9 @@ LLM-GTD 给 agent 一套 skill 化的可信系统：
 
 - `memory/gtd/` 里的纯 Markdown 状态
 - 完整 GTD 工作流，而不只是 inbox triage
-- 一个 `/gtd` 自动路由入口，加六个工作流命令：`init`、`capture`、`clarify`、`organize`、`engage`、`review`
+- 一个 `/gtd` 自动路由入口，加七个工作流命令：`init`、`capture`、`clarify`、`update`、`organize`、`engage`、`review`
 - Claude Code、Cursor、Codex 共用同一套可信系统
-- 日程信息完整时自动写入 Google Calendar，失败按 fail-closed 报告
+- 日程信息完整时自动写入外部 calendar provider，失败按 fail-closed 报告
 
 模型负责它擅长的事：起草下一步行动、清理结构、发现停滞项目、准备每周回顾。
 
@@ -65,6 +65,7 @@ David Allen 给了我们管理承诺的操作系统。LLM-GTD 把这套操作系
 | 搭建可信系统 | `gtd-init` | 创建八张 GTD 清单并检查接线；旧安装模式还会刷新 Codex slash prompts |
 | 捕捉一个想法或任务 | `gtd-capture` | 先写入 inbox，再自动理清小输入 |
 | 清理收件箱 | `gtd-clarify` | 把模糊的 stuff 变成 next action、project、waiting-for、reference 或 someday |
+| 汇报进展或变更 | `gtd-update` | 销掉已完成行动、推进项目、处理 waiting-for 回应、更新日程细节或纠正既有状态 |
 | 整理系统结构 | `gtd-organize` | 修复机械漂移：孤儿行动、停滞项目、错误情境、重复项 |
 | 判断现在做什么 | `gtd-engage` | 基于情境、时间、精力和优先级给 3-5 个候选行动 |
 | 做每周回顾 | `gtd-review` | 先生成只读预回顾包，清理机械漂移，再回顾 inbox/calendar/waiting/projects/horizons |
@@ -78,11 +79,11 @@ LLM-GTD 的运行状态存在八个纯 Markdown 文件里：
 | 文件 | GTD 清单 | 用途 |
 |---|---|---|
 | `memory/gtd/inbox.md` | Inbox | 零摩擦收集入口 |
-| `memory/gtd/next-actions.md` | Next Actions | 按情境分组的具体单步行动 |
+| `memory/gtd/next-actions.md` | Next Actions | 行动池中的具体单步行动，带预计时长 / 精力档 / 真实约束 |
 | `memory/gtd/projects.md` | Projects | 需要多步完成的成果，每个项目必须有当前下一步 |
 | `memory/gtd/waiting-for.md` | Waiting For | 委派或等待中的事项，记录人和约定 |
 | `memory/gtd/someday-maybe.md` | Someday/Maybe | 暂不承诺但不想忘掉的事 |
-| `memory/gtd/calendar.md` | Calendar fallback | 只放 hard landscape；真实日历不可达时才兜底 |
+| `memory/gtd/calendar.md` | Calendar fallback | 只放 hard landscape；外部 calendar provider不可达时才兜底 |
 | `memory/gtd/reference.md` | Reference | 无需行动的支持材料 |
 | `memory/gtd/horizons.md` | Horizons | 目的、愿景、目标、责任领域、项目和跑道 |
 
@@ -127,7 +128,7 @@ agent 可以替换，状态和工作流留下来。
 决定你要承诺什么、重视什么，不是。
 
 **它对日历写入 fail closed。**
-如果 Google Calendar 已连接，它就是唯一 hard landscape。日程信息完整时自动写入 Google Calendar；缺日期、时间、事项标题等关键字段时先澄清。工具失败时，LLM-GTD 不会假装已经完成。
+如果 external calendar provider 已连接，它就是唯一 hard landscape。日程信息完整时自动写入 external calendar provider；缺日期、时间、事项标题等关键字段时先澄清。工具失败时，LLM-GTD 不会假装已经完成。
 
 ## 安装
 
@@ -141,7 +142,7 @@ agent 可以替换，状态和工作流留下来。
 ```
 
 内置的 GTD skill 会在你说 GTD 相关话时自动激活，并加上 `/gtd` 自动路由入口和 `/gtd-*` 命令
-（`/gtd`、`/gtd-init`、`/gtd-capture`、`/gtd-clarify`、`/gtd-organize`、`/gtd-engage`、`/gtd-review`）。
+（`/gtd`、`/gtd-init`、`/gtd-capture`、`/gtd-clarify`、`/gtd-update`、`/gtd-organize`、`/gtd-engage`、`/gtd-review`）。
 状态只写到你**当前工作区**的 `memory/gtd/`——绝不打包进插件（`${CLAUDE_PLUGIN_ROOT}` 是只读的 skill，
 你的清单在你的项目里）。在你想存放 GTD 清单的工作区里跑 `/gtd-init`（或直接说）即可。
 
@@ -170,7 +171,7 @@ Run my weekly GTD review
 ```
 
 插件只会把用户状态写到当前工作区的 `memory/gtd/`，不会打包任何个人 GTD 数据，也不会内置
-Google Calendar app/MCP。如果你的 Codex 环境已经有 Google Calendar 能力，LLM-GTD 会把它当真实
+external calendar provider app/MCP。如果你的 Codex 环境已经有 external calendar provider 能力，LLM-GTD 会把它当真实
 hard landscape；否则降级到 `memory/gtd/calendar.md`。
 
 ### 使用旧版多平台安装器
@@ -205,7 +206,7 @@ cd LLM-GTD
 - Bash
 - Python 3，用于 status/dashboard 辅助脚本
 - Claude Code、Cursor 或 Codex，取决于你使用哪个界面
-- 可选：Google Calendar 访问权限，用于真实日历读取和确认后写入
+- 可选：external calendar provider 访问权限，用于外部 calendar provider读取和自动写入
 
 ## 快速开始
 
@@ -220,6 +221,7 @@ cd LLM-GTD
 ```text
 /gtd-capture Renew passport before the summer trip
 /gtd-clarify
+/gtd-update I submitted the passport documents
 /gtd-engage
 /gtd-review
 ```

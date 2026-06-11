@@ -17,16 +17,16 @@ a file is a file. Lists are physically separated (Allen's rule) so each stays si
 | file | list | note |
 |---|---|---|
 | `inbox.md` | Inbox | capture sink, zero judgment |
-| `next-actions.md` | Next Actions | **grouped by context** (@computer/@phone/@errands/@home/@agenda-person) |
+| `next-actions.md` | Next Actions | **kept in an action pool with lightweight context signals** (time / energy / real constraint lenses, with legacy @context compatibility) |
 | `projects.md` | Projects | outcome (>1 step) + a current next action; closed project blocks are deleted |
 | `waiting-for.md` | Waiting For | delegated/pending, with person + agreement |
 | `someday-maybe.md` | Someday/Maybe | incubating; monthly re-eval |
-| `calendar.md` | Calendar | hard landscape only; real Google Calendar wins when connected |
+| `calendar.md` | Calendar | hard landscape only; an available calendar provider wins when connected |
 | `reference.md` | Reference | non-actionable + project support material |
 | `horizons.md` | Horizons | the six Horizons of Focus (purpose → runway) |
 
 ### Layer 1 — Logic (the workflow)
-`skill/SKILL.md` (navigation) + six sub-command `SKILL.md` files. Written in **intent language**
+`skill/SKILL.md` (navigation) + seven sub-command `SKILL.md` files. Written in **intent language**
 ("read the list", "append a line") — **no platform tool names**. That neutrality is what lets one
 source feed three platforms.
 
@@ -50,6 +50,10 @@ GTD lists; ideas/knowledge → your note system. Knowledge never pollutes the ac
 (act-then-surface; markdown is trivially reversible). The harness stops and asks only on genuine
 forks: action-vs-knowledge, no derivable next action, an implied commitment, an unclear outcome,
 or a calendar write. Engage and Review keep the human in the loop by design.
+
+**Reality updates.** `update` is the bridge for "this already happened": completed next actions,
+waiting-for replies, project progress, calendar corrections, cancellations, and factual edits.
+It updates existing state and advances the project; it is not another inbox.
 
 ## Self-initialization
 
